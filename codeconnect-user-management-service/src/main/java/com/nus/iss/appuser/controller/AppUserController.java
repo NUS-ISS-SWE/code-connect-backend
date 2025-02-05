@@ -21,4 +21,9 @@ public class AppUserController {
         AppUser registeredUser = appUserService.registerUser(appUser);
         return ResponseEntity.ok(registeredUser);
     }
+
+    @GetMapping("/login")
+    public ResponseEntity<String> login() {
+        return ResponseEntity.ok("Login successful");
+    }
 }
