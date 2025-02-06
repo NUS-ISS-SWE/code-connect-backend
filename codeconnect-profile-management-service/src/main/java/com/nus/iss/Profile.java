@@ -1,15 +1,27 @@
 package com.nus.iss;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Profile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
+    private String fullName;
+    private String jobTitle;
+    private String currentCompany;
+    private String location;
     private String email;
     private String phone;
-    private String address;
+    private String aboutMe;
+    private String programmingLanguages;
     private String education;
     private String experience;
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -18,12 +30,36 @@ public class Profile {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getCurrentCompany() {
+        return currentCompany;
+    }
+
+    public void setCurrentCompany(String currentCompany) {
+        this.currentCompany = currentCompany;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getEmail() {
@@ -42,12 +78,20 @@ public class Profile {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getAboutMe() {
+        return aboutMe;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
+    public String getProgrammingLanguages() {
+        return programmingLanguages;
+    }
+
+    public void setProgrammingLanguages(String programmingLanguages) {
+        this.programmingLanguages = programmingLanguages;
     }
 
     public String getEducation() {
