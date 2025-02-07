@@ -1,4 +1,5 @@
 package com.nus.iss;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,8 @@ public class Profile {
     private String programmingLanguages;
     private String education;
     private String experience;
-
+    private String resumeFileName; 
+    
     // Getters and Setters
     public Long getId() {
         return id;
@@ -108,5 +110,13 @@ public class Profile {
 
     public void setExperience(String experience) {
         this.experience = experience;
+    }
+
+    public String getResumeFileName() {
+        return resumeFileName;
+    }
+
+    public void setResumeFileName(String resumeFileName) {
+        this.resumeFileName = resumeFileName;
     }
 }
