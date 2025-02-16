@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'Maven 3'
+    }
+
     environment {
         GIT_CREDENTIALS_ID = 'github-pat'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
