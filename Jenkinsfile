@@ -33,7 +33,6 @@ pipeline {
             steps {
                 script {
                     echo "Building microservice: ${params.MICROSERVICE_NAME}"
-                    sh "mvn clean verify -pl ${params.MICROSERVICE_NAME} -am -f ${params.MICROSERVICE_NAME}/pom.xml"
                     sh "cd code-connect-backend && mvn clean verify -pl ${params.MICROSERVICE_NAME} -am -f ${params.MICROSERVICE_NAME}/pom.xml"
                 }
             }
