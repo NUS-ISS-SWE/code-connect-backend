@@ -12,9 +12,9 @@ pipeline {
             'codeconnect-user-management-service',
             'codeconnect-profile-management-service'
         ], description: 'Select the microservice module to build')
-        booleanParam(name: 'TESTS_EXECUTION', defaultValue: true, description: 'Enable or disable test execution')
-        booleanParam(name: 'BUILD_DOCKER_IMAGE', defaultValue: true, description: 'Enable or disable docker build')
-        booleanParam(name: 'UPLOAD_DOCKER_HUB', defaultValue: true, description: 'Enable or disable push to DockerHub')
+        booleanParam(name: 'TESTS_EXECUTION', description: 'Enable or disable test execution')
+        booleanParam(name: 'BUILD_DOCKER_IMAGE', description: 'Enable or disable docker build')
+        booleanParam(name: 'UPLOAD_DOCKER_HUB', description: 'Enable or disable push to DockerHub')
     }
 
     stages {
@@ -33,6 +33,7 @@ pipeline {
             steps {
                 script {
                     echo "Building microservice: ${params.MICROSERVICE_NAME}"
+                    sh 'mvn -version'
                     sh "cd ${params.MICROSERVICE_NAME} && mvn clean verify"
                 }
             }
