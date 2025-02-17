@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'Java 21'
-        maven 'Maven 3'
-    }
-
     environment {
         GIT_CREDENTIALS_ID = 'github-pat'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
