@@ -46,7 +46,7 @@ pipeline {
 
         stage('Test & Quality Checks') {
             when {
-                expression { return params.RUN_TESTS }
+                expression { return params.TESTS_EXECUTION }
             }
             steps {
                 script {
@@ -68,10 +68,10 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            when {
+                expression { return params.BUILD_DOCKER_IMAGE }
+            }
             steps {
-                when {
-                    expression { return params.RUN_TESTS }
-                }
                 script {
                     echo "Building Docker image for ${params.MICROSERVICE_NAME}"
                     sh "docker build -t ${DOCKER_IMAGE}:latest ./${params.MICROSERVICE_NAME}"
@@ -80,10 +80,10 @@ pipeline {
         }
 
         stage('Upload to DockerHub') {
+            when {
+                expression { return params.UPLOAD_DOCKER_HUB }
+            }
             steps {
-                when {
-                    expression { return params.BUILD_DOCKER_IMAGE }
-                }
                 script {
                     echo "Logging in to DockerHub"
                     sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u USERNAME --password-stdin"
