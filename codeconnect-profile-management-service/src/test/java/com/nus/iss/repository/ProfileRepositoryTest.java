@@ -1,4 +1,4 @@
-package com.nus.iss.repository;
+package com.nus.iss;
 
 import java.util.Optional;
 
@@ -7,15 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import com.nus.iss.Profile;
-import com.nus.iss.ProfileRepository;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DataJpaTest
 public class ProfileRepositoryTest {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @MockBean
+    private FileStorageService fileStorageService;
 
     @Test
     public void testSaveProfile() {

@@ -1,5 +1,7 @@
 package com.nus.iss;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +23,11 @@ public class Profile {
     private String programmingLanguages;
     private String education;
     private String experience;
-    private String resumeFileName; 
+
+    @JsonIgnore
+    private String resume;
+    @JsonIgnore
+    private String resumeFileName;
     
     // Getters and Setters
     public Long getId() {
@@ -112,11 +118,41 @@ public class Profile {
         this.experience = experience;
     }
 
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
     public String getResumeFileName() {
         return resumeFileName;
     }
 
     public void setResumeFileName(String resumeFileName) {
         this.resumeFileName = resumeFileName;
+    }
+
+    public ResumeData getResumeData() {
+        return new ResumeData(this.resume, this.resumeFileName);
+    }
+
+    public static class ResumeData {
+        private String resumeContent;
+        private String resumeFileName;
+
+        public ResumeData(String resumeContent, String resumeFileName) {
+            this.resumeContent = resumeContent;
+            this.resumeFileName = resumeFileName;
+        }
+
+        public String getResumeContent() {
+            return resumeContent;
+        }
+
+        public String getResumeFileName() {
+            return resumeFileName;
+        }
     }
 }
