@@ -1,11 +1,15 @@
 package com.nus.iss;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class Profile {
@@ -21,14 +25,27 @@ public class Profile {
     private String phone;
     private String aboutMe;
     private String programmingLanguages;
-    private String education;
-    private String experience;
+
+    @ElementCollection
+    private List<String> education;
+
+    @ElementCollection
+    private List<String> experience;
+
+    @Lob
+    private byte[] profilePicture;
+
+    @ElementCollection
+    private List<String> certifications;
+
+    @ElementCollection
+    private List<String> skillSet;
 
     @JsonIgnore
     private String resume;
     @JsonIgnore
     private String resumeFileName;
-    
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -102,20 +119,44 @@ public class Profile {
         this.programmingLanguages = programmingLanguages;
     }
 
-    public String getEducation() {
+    public List<String> getEducation() {
         return education;
     }
 
-    public void setEducation(String education) {
+    public void setEducation(List<String> education) {
         this.education = education;
     }
 
-    public String getExperience() {
+    public List<String> getExperience() {
         return experience;
     }
 
-    public void setExperience(String experience) {
+    public void setExperience(List<String> experience) {
         this.experience = experience;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public List<String> getCertifications() {
+        return certifications;
+    }
+
+    public void setCertifications(List<String> certifications) {
+        this.certifications = certifications;
+    }
+
+    public List<String> getSkillSet() {
+        return skillSet;
+    }
+
+    public void setSkillSet(List<String> skillSet) {
+        this.skillSet = skillSet;
     }
 
     public String getResume() {
