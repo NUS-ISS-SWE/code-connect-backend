@@ -78,21 +78,21 @@ pipeline {
                 }
             }
         }
-//
-//         stage('Upload to DockerHub') {
-//             when {
-//                 expression { return params.UPLOAD_DOCKER_HUB }
-//             }
-//             steps {
-//                 script {
-//                     echo "Logging in to DockerHub"
-//                     sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u USERNAME --password-stdin"
-//
-//                     echo "Pushing Docker image to DockerHub"
-//                     sh "docker push ${DOCKER_IMAGE}:latest"
-//                 }
-//             }
-//         }
+
+        stage('Upload to DockerHub') {
+            when {
+                expression { return params.UPLOAD_DOCKER_HUB }
+            }
+            steps {
+                script {
+                    echo "Logging in to DockerHub"
+                    sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u USERNAME --password-stdin"
+
+                    echo "Pushing Docker image to DockerHub"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
     }
 
     post {
