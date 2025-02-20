@@ -30,6 +30,7 @@ public class SecurityConfig {
         return http.authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/api/v1/register").permitAll();
                     registry.requestMatchers("/api/auth/**").permitAll();
+                    registry.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
