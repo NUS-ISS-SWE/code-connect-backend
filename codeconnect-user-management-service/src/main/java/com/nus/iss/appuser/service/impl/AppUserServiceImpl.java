@@ -1,5 +1,7 @@
 package com.nus.iss.appuser.service.impl;
 
+import com.nus.iss.appuser.config.security.JwtConfig;
+import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
 import com.nus.iss.appuser.entity.AppUser;
 import com.nus.iss.appuser.repository.AppUserRepository;
 import com.nus.iss.appuser.service.AppUserService;
@@ -12,11 +14,13 @@ public class AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtConfig jwtConfig;
 
     @Autowired
-    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, JwtConfig jwtConfig) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtConfig = jwtConfig;
     }
 
     @Override
@@ -32,4 +36,19 @@ public class AppUserServiceImpl implements AppUserService {
                 .build();
         return appUserRepository.save(user);
     }
+
+    @Override
+    public JwtAccessTokenDTO login(String username, String password) {
+        AppUser user = appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        return JwtAccessTokenDTO.builder()
+                .accessToken(jwtConfig.generateToken(user.getUsername()))
+                .build();
+    }
+
 }
