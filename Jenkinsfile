@@ -95,7 +95,7 @@ pipeline {
             steps {
                 script {
                     echo "Logging in to DockerHub"
-                    sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u USERNAME --password-stdin"
+                    sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u maxin0525 --password-stdin"
 
                     echo "Pushing Docker image to DockerHub"
                     sh "docker push ${DOCKER_IMAGE}:latest"
