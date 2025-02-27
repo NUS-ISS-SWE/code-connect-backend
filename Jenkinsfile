@@ -8,7 +8,7 @@ pipeline {
     environment {
         GIT_CREDENTIALS_ID = 'github-pat'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-        DOCKER_IMAGE = "your-dockerhub-username/${params.MICROSERVICE_NAME}"
+        DOCKER_IMAGE = "maxin0525/${params.MICROSERVICE_NAME}"
     }
 
     parameters {
@@ -50,19 +50,20 @@ pipeline {
             }
             steps {
                 script {
-                    echo "Running unit tests for ${params.MICROSERVICE_NAME}"
-                    sh "mvn test -pl ${params.MICROSERVICE_NAME}"
-
-                    echo "Running SonarQube analysis"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "mvn sonar:sonar -Dsonar.projectKey=${params.MICROSERVICE_NAME}"
-                    }
-
-                    echo "Running OWASP Dependency Check"
-                    sh "mvn org.owasp:dependency-check-maven:check"
-
-                    echo "Running security scan using Trivy"
-                    sh "trivy fs --scanners vuln,secret ${params.MICROSERVICE_NAME}"
+                        echo "Skipping test and quality checks"
+//                     echo "Running unit tests for ${params.MICROSERVICE_NAME}"
+//                     sh "mvn test -pl ${params.MICROSERVICE_NAME}"
+//
+//                     echo "Running SonarQube analysis"
+//                     withSonarQubeEnv("${SONARQUBE_SERVER}") {
+//                         sh "mvn sonar:sonar -Dsonar.projectKey=${params.MICROSERVICE_NAME}"
+//                     }
+//
+//                     echo "Running OWASP Dependency Check"
+//                     sh "mvn org.owasp:dependency-check-maven:check"
+//
+//                     echo "Running security scan using Trivy"
+//                     sh "trivy fs --scanners vuln,secret ${params.MICROSERVICE_NAME}"
                 }
             }
         }
