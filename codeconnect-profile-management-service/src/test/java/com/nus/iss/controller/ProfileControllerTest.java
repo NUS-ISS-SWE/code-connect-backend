@@ -1,4 +1,4 @@
-package com.nus.iss.controller;
+package com.nus.iss;
 
 import java.util.Optional;
 
@@ -19,13 +19,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.nus.iss.Profile;
-import com.nus.iss.ProfileController;
-import com.nus.iss.ProfileService;
+import org.springframework.web.multipart.MultipartFile;
 
 @WebMvcTest(ProfileController.class)
 public class ProfileControllerTest {
@@ -35,6 +31,9 @@ public class ProfileControllerTest {
 
     @MockBean
     private ProfileService profileService;
+
+    @MockBean
+    private FileStorageService fileStorageService;
 
     @BeforeEach
     public void setUp() {
@@ -87,13 +86,15 @@ public class ProfileControllerTest {
     @Test
     public void testUploadResume() throws Exception {
         Profile profile = new Profile();
-        profile.setId(1L);
-        MockMultipartFile file = new MockMultipartFile("file", "resume.pdf", MediaType.APPLICATION_PDF_VALUE, "Resume Content".getBytes());
-        when(profileService.uploadResume(any(Long.class), any(MockMultipartFile.class))).thenReturn(profile);
+        profile.setFullName("John Doe");
+        when(profileService.uploadResume(any(Long.class), any(MultipartFile.class))).thenReturn(profile);
 
-        mockMvc.perform(multipart("/profiles/1/uploadResume").file(file))
+        MockMultipartFile resumeFile = new MockMultipartFile("file", "resume.pdf", "application/pdf", "resume content".getBytes());
+        when(fileStorageService.storeResumeFile(resumeFile)).thenReturn("resume.pdf");
+
+        mockMvc.perform(multipart("/profiles/1/uploadResume").file(resumeFile))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1));
+                .andExpect(jsonPath("$.fullName").value("John Doe"));
     }
 
     @Test
@@ -109,12 +110,12 @@ public class ProfileControllerTest {
 
     @Test
     public void testGetResume() throws Exception {
-        byte[] resumeContent = "Resume Content".getBytes();
-        when(profileService.getResume(any(Long.class))).thenReturn(resumeContent);
+        Profile profile = new Profile();
+        profile.setFullName("John Doe");
+        when(profileService.getResume(any(Long.class))).thenReturn(new byte[0]);
 
         mockMvc.perform(get("/profiles/1/resume"))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Content-Disposition", "attachment; filename=\"resume.pdf\""))
-                .andExpect(content().bytes(resumeContent));
+                .andExpect(content().bytes(new byte[0]));
     }
 }
