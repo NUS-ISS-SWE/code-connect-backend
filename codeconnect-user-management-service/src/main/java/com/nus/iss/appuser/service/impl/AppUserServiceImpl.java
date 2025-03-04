@@ -1,6 +1,7 @@
 package com.nus.iss.appuser.service.impl;
 
 import com.nus.iss.appuser.config.security.JwtConfig;
+import com.nus.iss.appuser.dto.AppUserDto;
 import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
 import com.nus.iss.appuser.entity.AppUser;
 import com.nus.iss.appuser.repository.AppUserRepository;
@@ -51,4 +52,14 @@ public class AppUserServiceImpl implements AppUserService {
                 .build();
     }
 
+    @Override
+    public AppUser updatePassword(AppUserDto appUserDto) {
+        AppUser user = appUserRepository.findByUsername(appUserDto.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!passwordEncoder.matches(appUserDto.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+        user.setPassword(passwordEncoder.encode(appUserDto.getNewPassword()));
+        return appUserRepository.save(user);
+    }
 }
