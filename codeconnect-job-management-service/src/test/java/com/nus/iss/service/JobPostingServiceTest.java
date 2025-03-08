@@ -1,17 +1,20 @@
 package com.nus.iss;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
 class JobPostingServiceTest {
 
@@ -28,10 +31,18 @@ class JobPostingServiceTest {
         MockitoAnnotations.openMocks(this);
         jobPosting = new JobPosting();
         jobPosting.setId(1L);
-        jobPosting.setTitle("Software Engineer");
-        jobPosting.setDescription("Develop and maintain software applications.");
-        jobPosting.setCompany("Tech Company");
-        jobPosting.setLocation("New York");
+        jobPosting.setCompanyName("Tech Company");
+        jobPosting.setCompanyDescription("A leading tech company");
+        jobPosting.setJobTitle("Software Engineer");
+        jobPosting.setJobType("Full-time");
+        jobPosting.setJobLocation("New York");
+        jobPosting.setJobDescription("Develop and maintain software applications.");
+        jobPosting.setRequiredSkills("Java, Spring Boot");
+        jobPosting.setPreferredSkills("React, Docker");
+        jobPosting.setRequiredCertifications("AWS Certified Developer");
+        jobPosting.setThumbnail("thumbnail.png");
+        jobPosting.setPostedDate(new Date());
+        jobPosting.setSalaryRange("$80,000 - $120,000");
     }
 
     @Test

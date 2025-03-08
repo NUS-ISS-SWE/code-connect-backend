@@ -1,5 +1,7 @@
 package com.nus.iss;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,10 +13,18 @@ public class JobPosting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String description;
-    private String company;
-    private String location;
+    private String companyName;
+    private String companyDescription;
+    private String jobTitle;
+    private String jobType;
+    private String jobLocation;
+    private String jobDescription;
+    private String requiredSkills;
+    private String preferredSkills;
+    private String requiredCertifications;
+    private String thumbnail;
+    private Date postedDate;
+    private String salaryRange;
 
     // Getters and Setters
     public Long getId() {
@@ -25,35 +35,99 @@ public class JobPosting {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCompanyDescription() {
+        return companyDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCompanyDescription(String companyDescription) {
+        this.companyDescription = companyDescription;
     }
 
-    public String getCompany() {
-        return company;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
-    public String getLocation() {
-        return location;
+    public String getJobType() {
+        return jobType;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getJobLocation() {
+        return jobLocation;
+    }
+
+    public void setJobLocation(String jobLocation) {
+        this.jobLocation = jobLocation;
+    }
+
+    public String getJobDescription() {
+        return jobDescription;
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
+    }
+
+    public String getRequiredSkills() {
+        return requiredSkills;
+    }
+
+    public void setRequiredSkills(String requiredSkills) {
+        this.requiredSkills = requiredSkills;
+    }
+
+    public String getPreferredSkills() {
+        return preferredSkills;
+    }
+
+    public void setPreferredSkills(String preferredSkills) {
+        this.preferredSkills = preferredSkills;
+    }
+
+    public String getRequiredCertifications() {
+        return requiredCertifications;
+    }
+
+    public void setRequiredCertifications(String requiredCertifications) {
+        this.requiredCertifications = requiredCertifications;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public Date getPostedDate() {
+        return postedDate;
+    }
+
+    public void setPostedDate(Date postedDate) {
+        this.postedDate = postedDate;
+    }
+
+    public String getSalaryRange() {
+        return salaryRange;
+    }
+
+    public void setSalaryRange(String salaryRange) {
+        this.salaryRange = salaryRange;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,10 +37,18 @@ class JobPostingControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(jobPostingController).build();
         jobPosting = new JobPosting();
         jobPosting.setId(1L);
-        jobPosting.setTitle("Software Engineer");
-        jobPosting.setDescription("Develop and maintain software applications.");
-        jobPosting.setCompany("Tech Company");
-        jobPosting.setLocation("New York");
+        jobPosting.setCompanyName("Tech Company");
+        jobPosting.setCompanyDescription("A leading tech company");
+        jobPosting.setJobTitle("Software Engineer");
+        jobPosting.setJobType("Full-time");
+        jobPosting.setJobLocation("New York");
+        jobPosting.setJobDescription("Develop and maintain software applications.");
+        jobPosting.setRequiredSkills("Java, Spring Boot");
+        jobPosting.setPreferredSkills("React, Docker");
+        jobPosting.setRequiredCertifications("AWS Certified Developer");
+        jobPosting.setThumbnail("thumbnail.png");
+        jobPosting.setPostedDate(new Date());
+        jobPosting.setSalaryRange("$80,000 - $120,000");
     }
 
     @Test
@@ -50,7 +59,7 @@ class JobPostingControllerTest {
         mockMvc.perform(get("/jobpostings"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].title").value("Software Engineer"));
+                .andExpect(jsonPath("$[0].companyName").value("Tech Company"));
     }
 
     @Test
@@ -60,7 +69,7 @@ class JobPostingControllerTest {
         mockMvc.perform(get("/jobpostings/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.title").value("Software Engineer"));
+                .andExpect(jsonPath("$.companyName").value("Tech Company"));
     }
 
     @Test
@@ -69,10 +78,10 @@ class JobPostingControllerTest {
 
         mockMvc.perform(post("/jobpostings")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"title\": \"Software Engineer\", \"description\": \"Develop and maintain software applications.\", \"company\": \"Tech Company\", \"location\": \"New York\"}"))
+                .content("{\"companyName\": \"Tech Company\", \"companyDescription\": \"A leading tech company\", \"jobTitle\": \"Software Engineer\", \"jobType\": \"Full-time\", \"jobLocation\": \"New York\", \"jobDescription\": \"Develop and maintain software applications.\", \"requiredSkills\": \"Java, Spring Boot\", \"preferredSkills\": \"React, Docker\", \"requiredCertifications\": \"AWS Certified Developer\", \"thumbnail\": \"thumbnail.png\", \"postedDate\": \"2023-10-01\", \"salaryRange\": \"$80,000 - $120,000\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.title").value("Software Engineer"));
+                .andExpect(jsonPath("$.companyName").value("Tech Company"));
     }
 
     @Test
