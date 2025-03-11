@@ -1,9 +1,13 @@
 FROM azul/zulu-openjdk-alpine:21-latest
 
-WORKDIR /app
+USER root
 
-COPY target/codeconnect-user-management-service-*.jar app.jar
+COPY jenkins_home /var/jenkins_home
 
-EXPOSE 8080
+RUN chown -R jenkins:jenkins /var/jenkins_home
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+USER jenkins
+
+EXPOSE 8080 50000
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]

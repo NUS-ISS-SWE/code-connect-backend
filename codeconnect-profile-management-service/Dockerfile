@@ -1,9 +1,13 @@
 FROM azul/zulu-openjdk-alpine:21-latest
 
-WORKDIR /app
+USER root
 
-COPY target/codeconnect-profile-management-service-0.0.1-SNAPSHOT.jar /app/codeconnect-profile-management-service.jar
+COPY jenkins_home /var/jenkins_home
 
-EXPOSE 8080
+RUN chown -R jenkins:jenkins /var/jenkins_home
 
-ENTRYPOINT ["java", "-jar", "codeconnect-profile-management-service.jar"]
+USER jenkins
+
+EXPOSE 8080 50000
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
