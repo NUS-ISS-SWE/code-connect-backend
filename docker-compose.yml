@@ -2,9 +2,11 @@ version: '3.8'
 
 services:
   jenkins:
-    image: maxin0525/nusissjenkins:v2  # 你的新 Jenkins 镜像
+    image: maxin0525/nusissjenkins:v3
     container_name: nusissjenkins
     ports:
       - "8700:8080"
       - "50000:50000"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
     restart: always
