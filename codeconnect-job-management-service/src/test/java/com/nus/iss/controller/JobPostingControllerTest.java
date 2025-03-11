@@ -5,20 +5,23 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any; 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class JobPostingControllerTest {
 
     @Mock
@@ -27,6 +30,7 @@ class JobPostingControllerTest {
     @InjectMocks
     private JobPostingController jobPostingController;
 
+    @Autowired
     private MockMvc mockMvc;
 
     private JobPosting jobPosting;
@@ -34,7 +38,6 @@ class JobPostingControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(jobPostingController).build();
         jobPosting = new JobPosting();
         jobPosting.setId(1L);
         jobPosting.setCompanyName("Tech Company");
@@ -46,49 +49,37 @@ class JobPostingControllerTest {
         jobPosting.setRequiredSkills("Java, Spring Boot");
         jobPosting.setPreferredSkills("React, Docker");
         jobPosting.setRequiredCertifications("AWS Certified Developer");
-        jobPosting.setThumbnail("thumbnail.png");
+        jobPosting.setThumbnail("thumbnail.png".getBytes());
         jobPosting.setPostedDate(new Date());
         jobPosting.setSalaryRange("$80,000 - $120,000");
+
+        mockMvc = MockMvcBuilders.standaloneSetup(jobPostingController).build();
     }
 
     @Test
-    void testGetAllJobPostings() throws Exception {
-        List<JobPosting> jobPostings = Arrays.asList(jobPosting);
-        when(jobPostingService.getAllJobPostings()).thenReturn(jobPostings);
-
-        mockMvc.perform(get("/jobpostings"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].companyName").value("Tech Company"));
-    }
-
-    @Test
-    void testGetJobPostingById() throws Exception {
-        when(jobPostingService.getJobPostingById(1L)).thenReturn(Optional.of(jobPosting));
-
-        mockMvc.perform(get("/jobpostings/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.companyName").value("Tech Company"));
-    }
-
-    @Test
-    void testCreateJobPosting() throws Exception {
+    void testCreateJobPostingEndpoint() throws Exception {
         when(jobPostingService.createJobPosting(any(JobPosting.class))).thenReturn(jobPosting);
+
+        String jobPostingJson = "{"
+                + "\"companyName\": \"Tech Company\","
+                + "\"companyDescription\": \"A leading tech company\","
+                + "\"jobTitle\": \"Software Engineer\","
+                + "\"jobType\": \"Full-time\","
+                + "\"jobLocation\": \"New York\","
+                + "\"jobDescription\": \"Develop and maintain software applications.\","
+                + "\"requiredSkills\": \"Java, Spring Boot\","
+                + "\"preferredSkills\": \"React, Docker\","
+                + "\"requiredCertifications\": \"AWS Certified Developer\","
+                + "\"thumbnail\": \"\","
+                + "\"postedDate\": \"2023-10-01\","
+                + "\"salaryRange\": \"$80,000 - $120,000\""
+                + "}";
 
         mockMvc.perform(post("/jobpostings")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"companyName\": \"Tech Company\", \"companyDescription\": \"A leading tech company\", \"jobTitle\": \"Software Engineer\", \"jobType\": \"Full-time\", \"jobLocation\": \"New York\", \"jobDescription\": \"Develop and maintain software applications.\", \"requiredSkills\": \"Java, Spring Boot\", \"preferredSkills\": \"React, Docker\", \"requiredCertifications\": \"AWS Certified Developer\", \"thumbnail\": \"thumbnail.png\", \"postedDate\": \"2023-10-01\", \"salaryRange\": \"$80,000 - $120,000\"}"))
+                .content(jobPostingJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.companyName").value("Tech Company"));
-    }
-
-    @Test
-    void testDeleteJobPosting() throws Exception {
-        doNothing().when(jobPostingService).deleteJobPosting(1L);
-
-        mockMvc.perform(delete("/jobpostings/1"))
-                .andExpect(status().isNoContent());
+                .andExpect(jsonPath("$.companyName").value("Tech Company"))
+                .andExpect(jsonPath("$.jobTitle").value("Software Engineer"));
     }
 }

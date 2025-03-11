@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class JobPosting {
@@ -22,9 +23,13 @@ public class JobPosting {
     private String requiredSkills;
     private String preferredSkills;
     private String requiredCertifications;
-    private String thumbnail;
+    
+    @Lob
+    private byte[] thumbnail;
+    
     private Date postedDate;
     private String salaryRange;
+    private int numberApplied; // Add this field
 
     // Getters and Setters
     public Long getId() {
@@ -107,11 +112,11 @@ public class JobPosting {
         this.requiredCertifications = requiredCertifications;
     }
 
-    public String getThumbnail() {
+    public byte[] getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(String thumbnail) {
+    public void setThumbnail(byte[] thumbnail) {
         this.thumbnail = thumbnail;
     }
 
@@ -129,5 +134,13 @@ public class JobPosting {
 
     public void setSalaryRange(String salaryRange) {
         this.salaryRange = salaryRange;
+    }
+
+    public int getNumberApplied() {
+        return numberApplied;
+    }
+
+    public void setNumberApplied(int numberApplied) {
+        this.numberApplied = numberApplied;
     }
 }

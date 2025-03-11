@@ -40,7 +40,7 @@ class JobPostingServiceTest {
         jobPosting.setRequiredSkills("Java, Spring Boot");
         jobPosting.setPreferredSkills("React, Docker");
         jobPosting.setRequiredCertifications("AWS Certified Developer");
-        jobPosting.setThumbnail("thumbnail.png");
+        jobPosting.setThumbnail("thumbnail.png".getBytes());
         jobPosting.setPostedDate(new Date());
         jobPosting.setSalaryRange("$80,000 - $120,000");
     }
