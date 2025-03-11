@@ -1,0 +1,10 @@
+commit 0ad3358c782797381e4c87f11ff64f36802405d3
+tree 5a764f5465ea732be736b81dbd7f08fa1e3ce892
+parent 8e175e11658190b190fc5f44e5450a56dbdf89ba
+author ShirleyMaX <E1503298@u.nus.edu> 2025-02-19 22:51:57 +0800
+committer ShirleyMaX <E1503298@u.nus.edu> 2025-02-19 22:51:57 +0800
+
+    with upload to docker hub
+
+
+:100644 100644 f15b31e688dba67f22b94f62bc85de75d4cdeede 1e948f8ae451a67c36489039f1cc6b9801c29985 M	Jenkinsfile

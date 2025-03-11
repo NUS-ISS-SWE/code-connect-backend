@@ -1,0 +1,16 @@
+secrets/
+identity.key.enc
+secret.key
+credentials.xml
+config.xml
+
+logs/
+war/
+workspace/
+caches/
+*.log
+*.lock
+*.tmp
+
+jobs/*/builds/
+config-history/

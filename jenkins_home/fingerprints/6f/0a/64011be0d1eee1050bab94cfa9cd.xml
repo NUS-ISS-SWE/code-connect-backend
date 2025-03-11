@@ -1,0 +1,19 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2025-02-19 14:44:31.872 UTC</timestamp>
+  <md5sum>6f0a64011be0d1eee1050bab94cfa9cd</md5sum>
+  <fileName>Credential id=github-pat name=NUS-ISS-SWE/******</fileName>
+  <usages>
+    <entry>
+      <string>CodeConnectBackend/backend</string>
+      <ranges>5-18,21-35</ranges>
+    </entry>
+  </usages>
+  <facets>
+    <com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet plugin="credentials@1408.va_622a_b_f5b_1b_1">
+      <timestamp>1740676101901</timestamp>
+      <itemFullName>CodeConnectBackend/backend</itemFullName>
+      <timestamp0>1740675868291</timestamp0>
+    </com.cloudbees.plugins.credentials.fingerprints.ItemCredentialsFingerprintFacet>
+  </facets>
+</fingerprint>

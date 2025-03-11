@@ -1,0 +1,13 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2025-02-27 17:08:40.459 UTC</timestamp>
+  <md5sum>ad807fc945e88aebd33dfe963f69451d</md5sum>
+  <fileName>Credential id=docker-hub-credentials name=maxin0525/******</fileName>
+  <usages>
+    <entry>
+      <string>CodeConnectBackend/backend</string>
+      <ranges>35</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>
