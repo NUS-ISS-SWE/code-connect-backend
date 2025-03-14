@@ -1,5 +1,6 @@
 package com.nus.iss.appuser.controller;
 
+import com.nus.iss.appuser.dto.AppUserDto;
 import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
 import com.nus.iss.appuser.entity.AppUser;
 import com.nus.iss.appuser.service.AppUserService;
@@ -25,6 +26,20 @@ public class AppUserController {
     public ResponseEntity<JwtAccessTokenDTO> login(@RequestBody AppUser appUser) {
         JwtAccessTokenDTO tokenDTO = appUserService.login(appUser.getUsername(), appUser.getPassword());
         return ResponseEntity.ok(tokenDTO);
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<AppUser> updatePassword(@RequestBody AppUserDto appUserDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if ("anonymousUser".equalsIgnoreCase((String) authentication.getPrincipal())) {
+            throw new RuntimeException("Anonymous user cannot update password");
+        } else if (!appUserDto.getUsername().equalsIgnoreCase((String) authentication.getPrincipal())) {
+            throw new RuntimeException("User can update only their own password");
+        } else {
+            appUserDto.setUsername((String) authentication.getPrincipal());
+            AppUser appUser = appUserService.updatePassword(appUserDto);
+            return ResponseEntity.ok(appUser);
+        }
     }
 
     @GetMapping("/test-token-admin")
