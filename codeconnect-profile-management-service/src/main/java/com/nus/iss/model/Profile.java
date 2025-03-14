@@ -25,6 +25,8 @@ public class Profile {
     private String phone;
     private String aboutMe;
     private String programmingLanguages;
+    
+    private String username; 
 
     @ElementCollection
     private List<String> education;
@@ -47,6 +49,15 @@ public class Profile {
     private String resumeFileName;
 
     // Getters and Setters
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     public Long getId() {
         return id;
     }

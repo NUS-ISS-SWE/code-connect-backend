@@ -22,6 +22,12 @@ public class ProfileService {
     @Autowired
     private FileStorageService fileStorageService;
 
+    public Profile getProfileByUsername(String username) {
+        return profileRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+    }
+
+
     public Profile createProfile(Profile profile) {
         return profileRepository.save(profile);
     }
