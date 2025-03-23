@@ -28,6 +28,12 @@ public class AppUserController {
         return ResponseEntity.ok(tokenDTO);
     }
 
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateUserAcc(@RequestParam String token) {
+        appUserService.activateUser(token);
+        return ResponseEntity.ok("User activated successfully");
+    }
+
     @PostMapping("/update-password")
     public ResponseEntity<AppUser> updatePassword(@RequestBody AppUserDto appUserDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
