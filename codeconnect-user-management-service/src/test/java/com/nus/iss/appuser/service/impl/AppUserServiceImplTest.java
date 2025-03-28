@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -23,6 +25,9 @@ class AppUserServiceImplTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private JavaMailSender javaMailSender;
 
     @InjectMocks
     private AppUserServiceImpl appUserService;
@@ -47,9 +52,12 @@ class AppUserServiceImplTest {
                 .username(testUser.getUsername())
                 .password("encodedPassword")
                 .role("USER")
+                .email("mingwei5087@gmail.com")
+                .status("INACTIVE")
                 .build();
 
         when(appUserRepository.save(any(AppUser.class))).thenReturn(savedUser);
+        doNothing().when(javaMailSender).send(any(SimpleMailMessage.class));
 
         AppUser registeredUser = appUserService.registerUser(testUser);
 
@@ -57,10 +65,14 @@ class AppUserServiceImplTest {
         assertEquals("testuser", registeredUser.getUsername());
         assertEquals("encodedPassword", registeredUser.getPassword());
         assertEquals("USER", registeredUser.getRole());
+        assertEquals("INACTIVE", registeredUser.getStatus());
 
         verify(appUserRepository, times(1)).findByUsername("testuser");
         verify(passwordEncoder, times(1)).encode("password123");
         verify(appUserRepository, times(1)).save(any(AppUser.class));
+        verify(javaMailSender, times(1)).send(any(SimpleMailMessage.class));
+
+
     }
 
     @Test
