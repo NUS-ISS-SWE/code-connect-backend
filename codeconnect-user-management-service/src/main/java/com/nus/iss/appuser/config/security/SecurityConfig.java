@@ -42,6 +42,7 @@ public class SecurityConfig {
                     registry.requestMatchers("/api/v1/register",
                                     "/api/v1/login",
                                     "/api/v1/update-password",
+                                    "/api/v1/activate",
                                     "/api/v1/compliance-data").permitAll()
                             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                             .requestMatchers("/h2-console/**").permitAll()
