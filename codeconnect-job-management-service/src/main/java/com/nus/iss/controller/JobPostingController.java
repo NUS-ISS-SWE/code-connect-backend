@@ -1,5 +1,7 @@
-package com.nus.iss;
+package com.nus.iss.controller;
 
+import com.nus.iss.model.JobPosting;
+import com.nus.iss.service.JobPostingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
