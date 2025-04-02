@@ -1,7 +1,10 @@
-package com.nus.iss;
+package com.nus.iss.controller;
 
 import java.util.Optional;
 
+import com.nus.iss.model.Profile;
+import com.nus.iss.service.FileStorageService;
+import com.nus.iss.service.ProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;

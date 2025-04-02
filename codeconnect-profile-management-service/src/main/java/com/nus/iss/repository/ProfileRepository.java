@@ -1,8 +1,10 @@
-package com.nus.iss;
+package com.nus.iss.repository;
 
 import java.io.IOException;
 import java.util.Optional;
 
+import com.nus.iss.model.Profile;
+import com.nus.iss.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
