@@ -18,10 +18,10 @@ import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nus.iss.FileStorageService;
-import com.nus.iss.Profile;
-import com.nus.iss.ProfileRepository;
-import com.nus.iss.ProfileService;
+import com.nus.iss.service.FileStorageService;
+import com.nus.iss.model.Profile;
+import com.nus.iss.repository.ProfileRepository;
+import com.nus.iss.service.ProfileService;
 
 public class ProfileServiceTest {
 
