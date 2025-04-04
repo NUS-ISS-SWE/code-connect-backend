@@ -1,6 +1,7 @@
-package com.nus.iss.appuser.repository;
+package com.nus.iss.repository;
 
-import com.nus.iss.appuser.entity.AppUser;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.repository.AppUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

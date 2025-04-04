@@ -1,7 +1,7 @@
-package com.nus.iss.appuser.config.filter;
+package com.nus.iss.config.filter;
 
-import com.nus.iss.appuser.config.security.AppUserDetailsService;
-import com.nus.iss.appuser.config.security.JwtConfig;
+import com.nus.iss.config.security.AppUserDetailsService;
+import com.nus.iss.config.security.JwtConfig;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

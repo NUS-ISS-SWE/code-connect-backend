@@ -1,7 +1,7 @@
-package com.nus.iss.appuser.service.impl;
+package com.nus.iss.service.impl;
 
-import com.nus.iss.appuser.entity.AppUser;
-import com.nus.iss.appuser.repository.AppUserRepository;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.repository.AppUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

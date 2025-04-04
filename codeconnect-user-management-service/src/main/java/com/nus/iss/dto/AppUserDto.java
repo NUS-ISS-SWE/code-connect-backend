@@ -1,4 +1,4 @@
-package com.nus.iss.appuser.dto;
+package com.nus.iss.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class JwtAccessTokenDTO {
-    private String accessToken;
+public class AppUserDto {
+    private String username;
+    private String password;
+    private String newPassword;
 }

@@ -1,9 +1,9 @@
-package com.nus.iss.appuser.controller;
+package com.nus.iss.controller;
 
-import com.nus.iss.appuser.dto.AppUserDto;
-import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
-import com.nus.iss.appuser.entity.AppUser;
-import com.nus.iss.appuser.service.AppUserService;
+import com.nus.iss.dto.AppUserDto;
+import com.nus.iss.dto.JwtAccessTokenDTO;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
