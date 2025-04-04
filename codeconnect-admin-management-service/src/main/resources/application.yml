@@ -1,0 +1,7 @@
+server:
+  port: 8084
+
+# Custom properties
+cdcnt:
+  services:
+    user-service-url: http://localhost:8081/api/v1
