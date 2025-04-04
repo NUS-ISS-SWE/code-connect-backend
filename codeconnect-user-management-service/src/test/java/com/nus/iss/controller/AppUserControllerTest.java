@@ -1,8 +1,8 @@
-package com.nus.iss.appuser.controller;
+package com.nus.iss.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nus.iss.appuser.entity.AppUser;
-import com.nus.iss.appuser.service.AppUserService;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.service.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

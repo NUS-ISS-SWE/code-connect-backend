@@ -1,8 +1,8 @@
-package com.nus.iss.appuser.service;
+package com.nus.iss.service;
 
-import com.nus.iss.appuser.dto.AppUserDto;
-import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
-import com.nus.iss.appuser.entity.AppUser;
+import com.nus.iss.dto.AppUserDto;
+import com.nus.iss.dto.JwtAccessTokenDTO;
+import com.nus.iss.entity.AppUser;
 
 public interface AppUserService {
     AppUser registerUser(AppUser appUser);

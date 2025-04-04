@@ -1,11 +1,11 @@
-package com.nus.iss.appuser.service.impl;
+package com.nus.iss.service.impl;
 
-import com.nus.iss.appuser.config.security.JwtConfig;
-import com.nus.iss.appuser.dto.AppUserDto;
-import com.nus.iss.appuser.dto.JwtAccessTokenDTO;
-import com.nus.iss.appuser.entity.AppUser;
-import com.nus.iss.appuser.repository.AppUserRepository;
-import com.nus.iss.appuser.service.AppUserService;
+import com.nus.iss.config.security.JwtConfig;
+import com.nus.iss.dto.AppUserDto;
+import com.nus.iss.dto.JwtAccessTokenDTO;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.repository.AppUserRepository;
+import com.nus.iss.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,7 +1,7 @@
-package com.nus.iss.appuser.config.security;
+package com.nus.iss.config.security;
 
-import com.nus.iss.appuser.entity.AppUser;
-import com.nus.iss.appuser.repository.AppUserRepository;
+import com.nus.iss.entity.AppUser;
+import com.nus.iss.repository.AppUserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

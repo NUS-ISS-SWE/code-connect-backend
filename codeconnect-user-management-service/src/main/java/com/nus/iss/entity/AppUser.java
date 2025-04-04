@@ -1,4 +1,4 @@
-package com.nus.iss.appuser.entity;
+package com.nus.iss.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

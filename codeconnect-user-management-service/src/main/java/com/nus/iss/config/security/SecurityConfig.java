@@ -1,6 +1,6 @@
-package com.nus.iss.appuser.config.security;
+package com.nus.iss.config.security;
 
-import com.nus.iss.appuser.config.filter.JwtAuthenticationFilter;
+import com.nus.iss.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
