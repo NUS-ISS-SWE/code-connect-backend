@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: codeconnect-api-gateway
+springdoc:
+  api-docs:
+    enabled: true
+    groups:
+      enabled: true
+  swagger-ui:
+    enabled: true
+    urls:
+      - name: user-service
+        url: http://localhost:8082/v3/api-docs
+      - name: admin-service
+        url: http://localhost:8083/v3/api-docs
+      - name: job-service
+        url: http://localhost:8084/v3/api-docs
+
+# Custom properties
+cdcnt:
+  security:
+    jwt:
+      issuer: nus-iss-codeconnect
+      secret: bnVzLWlzcy1jb2RlY29ubmVjdC1qd3Qtc2VjcmV0LXRva2Vu
+      expirationTimeMillis: 86400000
