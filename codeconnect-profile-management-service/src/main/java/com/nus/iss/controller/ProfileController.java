@@ -1,10 +1,12 @@
-package com.nus.iss;
+package com.nus.iss.controller;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.nus.iss.model.Profile;
+import com.nus.iss.service.ProfileService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

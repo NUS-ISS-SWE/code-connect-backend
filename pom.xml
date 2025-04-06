@@ -23,6 +23,10 @@
     </developers>
     <modules>
         <module>codeconnect-user-management-service</module>
+        <module>codeconnect-profile-management-service</module>
+        <module>codeconnect-job-management-service</module>
+        <module>codeconnect-admin-management-service</module>
+        <module>codeconnect-api-gateway</module>
     </modules>
     <scm>
         <connection/>
