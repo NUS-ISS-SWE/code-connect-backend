@@ -1,4 +1,7 @@
-package com.nus.iss;
+package com.nus.iss.service;
+
+import com.nus.iss.model.JobPosting;
+import com.nus.iss.repository.JobPostingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

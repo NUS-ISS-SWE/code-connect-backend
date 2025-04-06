@@ -1,5 +1,7 @@
-package com.nus.iss;
+package com.nus.iss.service;
 
+import com.nus.iss.model.JobPosting;
+import com.nus.iss.repository.JobPostingRepository;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

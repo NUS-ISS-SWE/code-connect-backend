@@ -1,4 +1,7 @@
-package com.nus.iss;
+package com.nus.iss.controller;
+
+import com.nus.iss.service.JobPostingService;
+import com.nus.iss.model.JobPosting;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
