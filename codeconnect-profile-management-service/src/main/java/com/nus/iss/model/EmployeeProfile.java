@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 
 @Entity
-public class Profile {
+public class EmployeeProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

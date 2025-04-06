@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.nus.iss.model.Profile;
-import com.nus.iss.service.ProfileService;
+import com.nus.iss.model.EmployeeProfile;
+import com.nus.iss.service.EmployeeProfileService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -33,16 +33,16 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/profiles")
-public class ProfileController {
+public class EmployeeProfileController {
 
     @Autowired
-    private ProfileService profileService;
+    private EmployeeProfileService profileService;
 
     @Value("${cdcnt.security.jwt.secret}")
     private String secret;
 
     @GetMapping("/current")
-    public Profile getCurrentUserProfile(@RequestHeader("Authorization") String authHeader) {
+    public EmployeeProfile getCurrentUserProfile(@RequestHeader("Authorization") String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new RuntimeException("Invalid token");
         }
@@ -62,22 +62,22 @@ public class ProfileController {
     }
 
     @PostMapping
-    public Profile createProfile(@RequestBody Profile profile) {
+    public EmployeeProfile createProfile(@RequestBody EmployeeProfile profile) {
         return profileService.createProfile(profile);
     }
 
     @GetMapping
-    public List<Profile> getAllProfiles() {
+    public List<EmployeeProfile> getAllProfiles() {
         return profileService.getAllProfiles();
     }
 
     @GetMapping("/{id}")
-    public Optional<Profile> getProfileById(@PathVariable Long id) {
+    public Optional<EmployeeProfile> getProfileById(@PathVariable Long id) {
         return profileService.getProfileById(id);
     }
 
     @PutMapping("/{id}")
-    public Profile updateProfile(@PathVariable Long id, @RequestBody Profile profile) {
+    public EmployeeProfile updateProfile(@PathVariable Long id, @RequestBody EmployeeProfile profile) {
         return profileService.updateProfile(id, profile);
     }
 
@@ -87,17 +87,17 @@ public class ProfileController {
     }
 
     @PatchMapping("/{id}")
-    public Profile updateProfileField(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public EmployeeProfile updateProfileField(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         return profileService.updateProfileField(id, updates);
     }
 
     @PostMapping("/{id}/uploadResume")
-    public Profile uploadResume(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+    public EmployeeProfile uploadResume(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         return profileService.uploadResume(id, file);
     }
 
     @DeleteMapping("/{id}/deleteResume")
-    public Profile deleteResume(@PathVariable Long id) throws IOException {
+    public EmployeeProfile deleteResume(@PathVariable Long id) throws IOException {
         return profileService.deleteResume(id);
     }
 
@@ -114,12 +114,12 @@ public class ProfileController {
     }
 
     @PostMapping("/{id}/profilePicture")
-    public Profile updateProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+    public EmployeeProfile updateProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
         return profileService.updateProfilePicture(id, file);
     }
 
     @DeleteMapping("/{id}/profilePicture")
-    public Profile deleteProfilePicture(@PathVariable Long id) {
+    public EmployeeProfile deleteProfilePicture(@PathVariable Long id) {
         return profileService.deleteProfilePicture(id);
     }
 
@@ -136,7 +136,7 @@ public class ProfileController {
     }
 
     @PostMapping("/{id}/certifications")
-    public Profile updateCertifications(@PathVariable Long id, @RequestBody List<String> certifications) {
+    public EmployeeProfile updateCertifications(@PathVariable Long id, @RequestBody List<String> certifications) {
         return profileService.updateCertifications(id, certifications);
     }
 
@@ -146,22 +146,22 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}/certifications")
-    public Profile deleteAllCertifications(@PathVariable Long id) {
+    public EmployeeProfile deleteAllCertifications(@PathVariable Long id) {
         return profileService.updateCertifications(id, List.of());
     }
 
     @DeleteMapping("/{id}/certifications/{certification}")
-    public Profile deleteCertification(@PathVariable Long id, @PathVariable String certification) {
+    public EmployeeProfile deleteCertification(@PathVariable Long id, @PathVariable String certification) {
         return profileService.deleteCertification(id, certification);
     }
 
     @PostMapping("/{id}/certifications/add")
-    public Profile addCertifications(@PathVariable Long id, @RequestBody List<String> certifications) {
+    public EmployeeProfile addCertifications(@PathVariable Long id, @RequestBody List<String> certifications) {
         return profileService.addCertifications(id, certifications);
     }
 
     @PostMapping("/{id}/skillSet")
-    public Profile updateSkillSet(@PathVariable Long id, @RequestBody List<String> skillSet) {
+    public EmployeeProfile updateSkillSet(@PathVariable Long id, @RequestBody List<String> skillSet) {
         return profileService.updateSkillSet(id, skillSet);
     }
 
@@ -171,22 +171,22 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}/skillSet")
-    public Profile deleteAllSkillSet(@PathVariable Long id) {
+    public EmployeeProfile deleteAllSkillSet(@PathVariable Long id) {
         return profileService.updateSkillSet(id, List.of());
     }
 
     @DeleteMapping("/{id}/skillSet/{skill}")
-    public Profile deleteSkill(@PathVariable Long id, @PathVariable String skill) {
+    public EmployeeProfile deleteSkill(@PathVariable Long id, @PathVariable String skill) {
         return profileService.deleteSkill(id, skill);
     }
 
     @PostMapping("/{id}/skillSet/add")
-    public Profile addSkillSet(@PathVariable Long id, @RequestBody List<String> skillSet) {
+    public EmployeeProfile addSkillSet(@PathVariable Long id, @RequestBody List<String> skillSet) {
         return profileService.addSkillSet(id, skillSet);
     }
 
     @PostMapping("/{id}/education")
-    public Profile updateEducation(@PathVariable Long id, @RequestBody List<String> education) {
+    public EmployeeProfile updateEducation(@PathVariable Long id, @RequestBody List<String> education) {
         return profileService.updateEducation(id, education);
     }
 
@@ -196,22 +196,22 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}/education")
-    public Profile deleteAllEducation(@PathVariable Long id) {
+    public EmployeeProfile deleteAllEducation(@PathVariable Long id) {
         return profileService.updateEducation(id, List.of());
     }
 
     @DeleteMapping("/{id}/education/{educationEntry}")
-    public Profile deleteEducationEntry(@PathVariable Long id, @PathVariable String educationEntry) {
+    public EmployeeProfile deleteEducationEntry(@PathVariable Long id, @PathVariable String educationEntry) {
         return profileService.deleteEducationEntry(id, educationEntry);
     }
 
     @PostMapping("/{id}/education/add")
-    public Profile addEducation(@PathVariable Long id, @RequestBody List<String> education) {
+    public EmployeeProfile addEducation(@PathVariable Long id, @RequestBody List<String> education) {
         return profileService.addEducation(id, education);
     }
 
     @PostMapping("/{id}/experience")
-    public Profile updateExperience(@PathVariable Long id, @RequestBody List<String> experience) {
+    public EmployeeProfile updateExperience(@PathVariable Long id, @RequestBody List<String> experience) {
         return profileService.updateExperience(id, experience);
     }
 
@@ -221,17 +221,17 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{id}/experience")
-    public Profile deleteAllExperience(@PathVariable Long id) {
+    public EmployeeProfile deleteAllExperience(@PathVariable Long id) {
         return profileService.updateExperience(id, List.of());
     }
 
     @DeleteMapping("/{id}/experience/{experienceEntry}")
-    public Profile deleteExperienceEntry(@PathVariable Long id, @PathVariable String experienceEntry) {
+    public EmployeeProfile deleteExperienceEntry(@PathVariable Long id, @PathVariable String experienceEntry) {
         return profileService.deleteExperienceEntry(id, experienceEntry);
     }
 
     @PostMapping("/{id}/experience/add")
-    public Profile addExperience(@PathVariable Long id, @RequestBody List<String> experience) {
+    public EmployeeProfile addExperience(@PathVariable Long id, @RequestBody List<String> experience) {
         return profileService.addExperience(id, experience);
     }
 }
