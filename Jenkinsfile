@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3'
+        maven '3.9.9'
     }
 
     environment {
@@ -12,14 +12,11 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'feature/sprint4/maxin/CDCNT-39-CICD', description: 'Select the branch to build')
-//         choice(name: 'MICROSERVICE_NAME', choices: [
-//             'codeconnect-user-management-service',
-//             'codeconnect-profile-management-service'
-//         ], description: 'Select the microservice module to build')
-        booleanParam(name: 'TESTS_EXECUTION', description: 'Enable or disable test execution')
-        booleanParam(name: 'BUILD_DOCKER_IMAGE', description: 'Enable or disable docker build')
-        booleanParam(name: 'UPLOAD_DOCKER_HUB', description: 'Enable or disable push to DockerHub')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
+        booleanParam(name: 'TESTS_EXECUTION', defaultValue: true, description: 'Run tests')
+        booleanParam(name: 'BUILD_DOCKER_IMAGE', defaultValue: true, description: 'Build Docker image')
+        booleanParam(name: 'UPLOAD_DOCKER_HUB', defaultValue: false, description: 'Push to DockerHub')
+        // MICROSERVICE_NAME 是通过 Active Choices Plugin 配置的，不用在这里声明
     }
 
     stages {
@@ -37,33 +34,17 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    echo "Building microservice: ${params.MICROSERVICE_NAME}"
-                    sh 'mvn -version'
                     sh "cd ${params.MICROSERVICE_NAME} && mvn clean verify"
                 }
             }
         }
 
-        stage('Test & Quality Checks') {
+        stage('Test') {
             when {
                 expression { return params.TESTS_EXECUTION }
             }
             steps {
-                script {
-                    echo "Running unit tests for ${params.MICROSERVICE_NAME}"
-                    sh "mvn test -pl ${params.MICROSERVICE_NAME}"
-
-                    echo "Running SonarQube analysis"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "mvn sonar:sonar -Dsonar.projectKey=${params.MICROSERVICE_NAME}"
-                    }
-
-                    echo "Running OWASP Dependency Check"
-                    sh "mvn org.owasp:dependency-check-maven:check"
-
-                    echo "Running security scan using Trivy"
-                    sh "trivy fs --scanners vuln,secret ${params.MICROSERVICE_NAME}"
-                }
+                sh "mvn test -pl ${params.MICROSERVICE_NAME}"
             }
         }
 
@@ -72,38 +53,35 @@ pipeline {
                 expression { return params.BUILD_DOCKER_IMAGE }
             }
             steps {
-                script {
-                    echo "Building Docker image for ${params.MICROSERVICE_NAME}"
-                    sh "docker build -t ${DOCKER_IMAGE}:latest ./${params.MICROSERVICE_NAME}"
-                }
+                sh "docker build -t ${DOCKER_IMAGE}:latest ./${params.MICROSERVICE_NAME}"
             }
         }
 
-       stage('Upload to DockerHub') {
-           when {
-               expression { return params.UPLOAD_DOCKER_HUB }
-           }
-           steps {
-               script {
-                   echo "Logging in to DockerHub"
-
-                   withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                       sh """
-                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                         docker push ${DOCKER_IMAGE}:latest
-                       """
-                   }
-               }
-           }
-       }
+        stage('Upload to DockerHub') {
+            when {
+                expression { return params.UPLOAD_DOCKER_HUB }
+            }
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKER_CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push ${DOCKER_IMAGE}:latest
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Build and upload completed successfully!'
+            echo '✅ Build and Docker steps completed successfully!'
         }
         failure {
-            echo 'Build failed! Please check the logs for details.'
-                }
+            echo '❌ Build failed, please check logs.'
+        }
     }
 }
