@@ -12,11 +12,11 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Select the branch to build')
-        choice(name: 'MICROSERVICE_NAME', choices: [
-            'codeconnect-user-management-service',
-            'codeconnect-profile-management-service'
-        ], description: 'Select the microservice module to build')
+        string(name: 'BRANCH_NAME', defaultValue: 'feature/sprint4/maxin/CDCNT-39-CICD', description: 'Select the branch to build')
+//         choice(name: 'MICROSERVICE_NAME', choices: [
+//             'codeconnect-user-management-service',
+//             'codeconnect-profile-management-service'
+//         ], description: 'Select the microservice module to build')
         booleanParam(name: 'TESTS_EXECUTION', description: 'Enable or disable test execution')
         booleanParam(name: 'BUILD_DOCKER_IMAGE', description: 'Enable or disable docker build')
         booleanParam(name: 'UPLOAD_DOCKER_HUB', description: 'Enable or disable push to DockerHub')
