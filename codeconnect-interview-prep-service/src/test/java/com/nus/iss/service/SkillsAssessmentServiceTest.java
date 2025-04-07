@@ -1,4 +1,4 @@
-package com.nus.iss;
+package com.nus.iss.service;
 
 import java.util.Arrays;
 import java.util.List;
