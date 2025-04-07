@@ -19,20 +19,20 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nus.iss.service.FileStorageService;
-import com.nus.iss.model.Profile;
-import com.nus.iss.repository.ProfileRepository;
-import com.nus.iss.service.ProfileService;
+import com.nus.iss.model.EmployeeProfile;
+import com.nus.iss.repository.EmployeeProfileRepository;
+import com.nus.iss.service.EmployeeProfileService;
 
-public class ProfileServiceTest {
+public class EmployeeProfileServiceTest {
 
     @Mock
-    private ProfileRepository profileRepository;
+    private EmployeeProfileRepository profileRepository;
 
     @Mock
     private FileStorageService fileStorageService;
 
     @InjectMocks
-    private ProfileService profileService;
+    private EmployeeProfileService profileService;
 
     @BeforeEach
     public void setUp() {
@@ -41,10 +41,10 @@ public class ProfileServiceTest {
 
     @Test
     public void testCreateProfile() {
-        Profile profile = new Profile();
-        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+        EmployeeProfile profile = new EmployeeProfile();
+        when(profileRepository.save(any(EmployeeProfile.class))).thenReturn(profile);
 
-        Profile createdProfile = profileService.createProfile(profile);
+        EmployeeProfile createdProfile = profileService.createProfile(profile);
 
         assertNotNull(createdProfile);
         verify(profileRepository, times(1)).save(profile);
@@ -52,11 +52,11 @@ public class ProfileServiceTest {
 
     @Test
     public void testGetProfileById() {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setId(1L);
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
 
-        Optional<Profile> foundProfile = profileService.getProfileById(1L);
+        Optional<EmployeeProfile> foundProfile = profileService.getProfileById(1L);
 
         assertNotNull(foundProfile);
         assertEquals(1L, foundProfile.get().getId());
@@ -64,12 +64,12 @@ public class ProfileServiceTest {
 
     @Test
     public void testUpdateProfile() {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setId(1L);
         when(profileRepository.existsById(1L)).thenReturn(true);
-        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+        when(profileRepository.save(any(EmployeeProfile.class))).thenReturn(profile);
 
-        Profile updatedProfile = profileService.updateProfile(1L, profile);
+        EmployeeProfile updatedProfile = profileService.updateProfile(1L, profile);
 
         assertNotNull(updatedProfile);
         assertEquals(1L, updatedProfile.getId());
@@ -84,16 +84,16 @@ public class ProfileServiceTest {
 
     @Test
     public void testUploadResume() throws IOException {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setId(1L);
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
-        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+        when(profileRepository.save(any(EmployeeProfile.class))).thenReturn(profile);
 
         MultipartFile file = mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("resume.pdf");
         when(fileStorageService.storeResumeFile(file)).thenReturn("resume.pdf");
 
-        Profile updatedProfile = profileService.uploadResume(1L, file);
+        EmployeeProfile updatedProfile = profileService.uploadResume(1L, file);
 
         assertNotNull(updatedProfile);
         assertEquals("resume.pdf", updatedProfile.getResumeFileName());
@@ -102,13 +102,13 @@ public class ProfileServiceTest {
 
     @Test
     public void testDeleteResume() throws IOException {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setId(1L);
         profile.setResumeFileName("resume.pdf");
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));
-        when(profileRepository.save(any(Profile.class))).thenReturn(profile);
+        when(profileRepository.save(any(EmployeeProfile.class))).thenReturn(profile);
 
-        Profile updatedProfile = profileService.deleteResume(1L);
+        EmployeeProfile updatedProfile = profileService.deleteResume(1L);
 
         assertNotNull(updatedProfile);
         assertNull(updatedProfile.getResumeFileName());
@@ -117,7 +117,7 @@ public class ProfileServiceTest {
 
     @Test
     public void testGetResume() throws IOException {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setId(1L);
         profile.setResumeFileName("resume.pdf");
         when(profileRepository.findById(1L)).thenReturn(Optional.of(profile));

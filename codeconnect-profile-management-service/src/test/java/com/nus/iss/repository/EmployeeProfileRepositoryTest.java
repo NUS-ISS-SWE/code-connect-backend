@@ -5,7 +5,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.nus.iss.model.Profile;
+import com.nus.iss.model.EmployeeProfile;
 import com.nus.iss.service.FileStorageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +13,30 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @DataJpaTest
-public class ProfileRepositoryTest {
+public class EmployeeProfileRepositoryTest {
 
     @Autowired
-    private ProfileRepository profileRepository;
+    private EmployeeProfileRepository profileRepository;
 
     @MockBean
     private FileStorageService fileStorageService;
 
     @Test
     public void testSaveProfile() {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setFullName("John Doe");
-        Profile savedProfile = profileRepository.save(profile);
+        EmployeeProfile savedProfile = profileRepository.save(profile);
 
         assertEquals("John Doe", savedProfile.getFullName());
     }
 
     @Test
     public void testFindById() {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setFullName("John Doe");
-        Profile savedProfile = profileRepository.save(profile);
+        EmployeeProfile savedProfile = profileRepository.save(profile);
 
-        Optional<Profile> foundProfile = profileRepository.findById(savedProfile.getId());
+        Optional<EmployeeProfile> foundProfile = profileRepository.findById(savedProfile.getId());
 
         assertTrue(foundProfile.isPresent());
         assertEquals("John Doe", foundProfile.get().getFullName());
@@ -44,13 +44,13 @@ public class ProfileRepositoryTest {
 
     @Test
     public void testDeleteById() {
-        Profile profile = new Profile();
+        EmployeeProfile profile = new EmployeeProfile();
         profile.setFullName("John Doe");
-        Profile savedProfile = profileRepository.save(profile);
+        EmployeeProfile savedProfile = profileRepository.save(profile);
 
         profileRepository.deleteById(savedProfile.getId());
 
-        Optional<Profile> foundProfile = profileRepository.findById(savedProfile.getId());
+        Optional<EmployeeProfile> foundProfile = profileRepository.findById(savedProfile.getId());
 
         assertTrue(foundProfile.isEmpty());
     }

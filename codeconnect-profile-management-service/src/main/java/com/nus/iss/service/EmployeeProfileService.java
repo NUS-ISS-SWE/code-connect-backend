@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.nus.iss.model.Profile;
-import com.nus.iss.repository.ProfileRepository;
+import com.nus.iss.model.EmployeeProfile;
+import com.nus.iss.repository.EmployeeProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,35 +14,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class ProfileService {
+public class EmployeeProfileService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeProfileService.class);
 
     @Autowired
-    private ProfileRepository profileRepository;
+    private EmployeeProfileRepository profileRepository;
 
     @Autowired
     private FileStorageService fileStorageService;
 
-    public Profile getProfileByUsername(String username) {
+    public EmployeeProfile getProfileByUsername(String username) {
         return profileRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
     }
 
 
-    public Profile createProfile(Profile profile) {
+    public EmployeeProfile createProfile(EmployeeProfile profile) {
         return profileRepository.save(profile);
     }
 
-    public List<Profile> getAllProfiles() {
+    public List<EmployeeProfile> getAllProfiles() {
         return profileRepository.findAll();
     }
 
-    public Optional<Profile> getProfileById(Long id) {
+    public Optional<EmployeeProfile> getProfileById(Long id) {
         return profileRepository.findById(id);
     }
 
-    public Profile updateProfile(Long id, Profile updatedProfile) {
+    public EmployeeProfile updateProfile(Long id, EmployeeProfile updatedProfile) {
         if (profileRepository.existsById(id)) {
             updatedProfile.setId(id);
             return profileRepository.save(updatedProfile);
@@ -55,10 +55,10 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
-    public Profile updateProfileField(Long id, Map<String, Object> updates) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile updateProfileField(Long id, Map<String, Object> updates) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             updates.forEach((key, value) -> {
                 switch (key) {
                     case "fullName":
@@ -101,8 +101,8 @@ public class ProfileService {
         }
     }
 
-    public Profile uploadResume(Long id, MultipartFile file) throws IOException {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+    public EmployeeProfile uploadResume(Long id, MultipartFile file) throws IOException {
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
         if (file.isEmpty() || file.getOriginalFilename().isEmpty()) {
             if (profile.getResumeFileName() != null) {
                 fileStorageService.deleteResumeFile(profile.getResumeFileName());
@@ -117,8 +117,8 @@ public class ProfileService {
         return profileRepository.save(profile);
     }
 
-    public Profile deleteResume(Long id) throws IOException {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+    public EmployeeProfile deleteResume(Long id) throws IOException {
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
         if (profile.getResumeFileName() != null) {
             fileStorageService.deleteResumeFile(profile.getResumeFileName());
             profile.setResume(null);
@@ -129,14 +129,14 @@ public class ProfileService {
     }
 
     public byte[] getResume(Long id) throws IOException {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Profile not found"));
         if (profile.getResumeFileName() == null) {
             throw new IllegalArgumentException("Resume not found");
         }
         return fileStorageService.getResumeFile(profile.getResumeFileName());
     }
 
-    public Profile updateProfilePicture(Long id, MultipartFile file) throws IOException {
+    public EmployeeProfile updateProfilePicture(Long id, MultipartFile file) throws IOException {
         logger.info("Updating profile picture for profile ID: {}", id);
         String contentType = file.getContentType();
         logger.info("File content type: {}", contentType);
@@ -144,42 +144,42 @@ public class ProfileService {
             throw new IllegalArgumentException("Only PNG and JPEG formats are supported for profile pictures");
         }
 
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setProfilePicture(file.getBytes());
         logger.info("Profile picture updated for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
     public byte[] getProfilePicture(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         return profile.getProfilePicture();
     }
 
-    public Profile deleteProfilePicture(Long id) {
+    public EmployeeProfile deleteProfilePicture(Long id) {
         logger.info("Deleting profile picture for profile ID: {}", id);
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setProfilePicture(null);
         logger.info("Profile picture deleted for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
-    public Profile updateCertifications(Long id, List<String> certifications) {
+    public EmployeeProfile updateCertifications(Long id, List<String> certifications) {
         logger.info("Updating certifications for profile ID: {}", id);
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setCertifications(certifications);
         logger.info("Certifications updated for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
     public List<String> getCertifications(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         return profile.getCertifications();
     }
 
-    public Profile deleteCertification(Long id, String certification) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile deleteCertification(Long id, String certification) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> certifications = profile.getCertifications();
             certifications.remove(certification);
             profile.setCertifications(certifications);
@@ -189,10 +189,10 @@ public class ProfileService {
         }
     }
 
-    public Profile addCertifications(Long id, List<String> certifications) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile addCertifications(Long id, List<String> certifications) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> existingCertifications = profile.getCertifications();
             existingCertifications.addAll(certifications);
             profile.setCertifications(existingCertifications);
@@ -202,23 +202,23 @@ public class ProfileService {
         }
     }
 
-    public Profile updateSkillSet(Long id, List<String> skillSet) {
+    public EmployeeProfile updateSkillSet(Long id, List<String> skillSet) {
         logger.info("Updating skill set for profile ID: {}", id);
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setSkillSet(skillSet);
         logger.info("Skill set updated for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
     public List<String> getSkillSet(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         return profile.getSkillSet();
     }
 
-    public Profile deleteSkill(Long id, String skill) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile deleteSkill(Long id, String skill) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> skillSet = profile.getSkillSet();
             skillSet.remove(skill);
             profile.setSkillSet(skillSet);
@@ -228,10 +228,10 @@ public class ProfileService {
         }
     }
 
-    public Profile addSkillSet(Long id, List<String> skillSet) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile addSkillSet(Long id, List<String> skillSet) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> existingSkillSet = profile.getSkillSet();
             existingSkillSet.addAll(skillSet);
             profile.setSkillSet(existingSkillSet);
@@ -241,23 +241,23 @@ public class ProfileService {
         }
     }
 
-    public Profile updateEducation(Long id, List<String> education) {
+    public EmployeeProfile updateEducation(Long id, List<String> education) {
         logger.info("Updating education for profile ID: {}", id);
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setEducation(education);
         logger.info("Education updated for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
     public List<String> getEducation(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         return profile.getEducation();
     }
 
-    public Profile deleteEducationEntry(Long id, String educationEntry) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile deleteEducationEntry(Long id, String educationEntry) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> education = profile.getEducation();
             education.remove(educationEntry);
             profile.setEducation(education);
@@ -267,10 +267,10 @@ public class ProfileService {
         }
     }
 
-    public Profile addEducation(Long id, List<String> education) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile addEducation(Long id, List<String> education) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> existingEducation = profile.getEducation();
             existingEducation.addAll(education);
             profile.setEducation(existingEducation);
@@ -280,23 +280,23 @@ public class ProfileService {
         }
     }
 
-    public Profile updateExperience(Long id, List<String> experience) {
+    public EmployeeProfile updateExperience(Long id, List<String> experience) {
         logger.info("Updating experience for profile ID: {}", id);
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         profile.setExperience(experience);
         logger.info("Experience updated for profile ID: {}", id);
         return profileRepository.save(profile);
     }
 
     public List<String> getExperience(Long id) {
-        Profile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
+        EmployeeProfile profile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile not found"));
         return profile.getExperience();
     }
 
-    public Profile deleteExperienceEntry(Long id, String experienceEntry) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile deleteExperienceEntry(Long id, String experienceEntry) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> experience = profile.getExperience();
             experience.remove(experienceEntry);
             profile.setExperience(experience);
@@ -306,10 +306,10 @@ public class ProfileService {
         }
     }
 
-    public Profile addExperience(Long id, List<String> experience) {
-        Optional<Profile> optionalProfile = profileRepository.findById(id);
+    public EmployeeProfile addExperience(Long id, List<String> experience) {
+        Optional<EmployeeProfile> optionalProfile = profileRepository.findById(id);
         if (optionalProfile.isPresent()) {
-            Profile profile = optionalProfile.get();
+            EmployeeProfile profile = optionalProfile.get();
             List<String> existingExperience = profile.getExperience();
             existingExperience.addAll(experience);
             profile.setExperience(existingExperience);
