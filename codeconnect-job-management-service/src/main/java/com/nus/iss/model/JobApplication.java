@@ -1,4 +1,4 @@
-package com.nus.iss;
+package com.nus.iss.model;
 
 import java.util.Date;
 
@@ -23,6 +23,7 @@ public class JobApplication {
     private String applicantName;
     private String applicantEmail;
     private Date applicationDate;
+    private String status; // Field to track application status
 
     // Getters and setters
     public Long getId() {
@@ -63,5 +64,13 @@ public class JobApplication {
 
     public void setApplicationDate(Date applicationDate) {
         this.applicationDate = applicationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
