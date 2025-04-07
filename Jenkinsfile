@@ -79,20 +79,23 @@ pipeline {
             }
         }
 
-        stage('Upload to DockerHub') {
-            when {
-                expression { return params.UPLOAD_DOCKER_HUB }
-            }
-            steps {
-                script {
-                    echo "Logging in to DockerHub"
-                    sh "echo \$(cat /run/secrets/${DOCKER_CREDENTIALS_ID}) | docker login -u USERNAME --password-stdin"
+       stage('Upload to DockerHub') {
+           when {
+               expression { return params.UPLOAD_DOCKER_HUB }
+           }
+           steps {
+               script {
+                   echo "Logging in to DockerHub"
 
-                    echo "Pushing Docker image to DockerHub"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
-                }
-            }
-        }
+                   withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                       sh """
+                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                         docker push ${DOCKER_IMAGE}:latest
+                       """
+                   }
+               }
+           }
+       }
     }
 
     post {
