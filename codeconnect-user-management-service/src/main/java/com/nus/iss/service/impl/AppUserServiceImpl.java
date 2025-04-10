@@ -33,10 +33,10 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
-                               EmployerProfileRepository employerProfileRepository,
-                               EmployeeProfileRepository employeeProfileRepository,
-                               PasswordEncoder passwordEncoder,
-                               JwtConfig jwtConfig,
+                              EmployerProfileRepository employerProfileRepository,
+                              EmployeeProfileRepository employeeProfileRepository,
+                              PasswordEncoder passwordEncoder,
+                              JwtConfig jwtConfig,
                               NotificationService notificationService) {
         this.appUserRepository = appUserRepository;
         this.employerProfileRepository = employerProfileRepository;
@@ -134,8 +134,12 @@ public class AppUserServiceImpl implements AppUserService {
         String decodedToken = new String(Base64.getDecoder().decode(token));
         AppUser user = appUserRepository.findByUsername(decodedToken)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
-        user.setStatus(AppConstants.ACTIVE);
-        appUserRepository.save(user);
+        if (AppConstants.INACTIVE.equalsIgnoreCase(user.getStatus()) || AppConstants.ACTIVE.equalsIgnoreCase(user.getStatus())) {
+            user.setStatus(AppConstants.ACTIVE);
+            appUserRepository.save(user);
+        } else {
+            throw new RuntimeException("User is under review");
+        }
     }
 
 
