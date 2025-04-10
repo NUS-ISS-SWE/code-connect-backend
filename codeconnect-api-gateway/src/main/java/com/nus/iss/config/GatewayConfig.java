@@ -31,6 +31,8 @@ public class GatewayConfig {
                         .uri(ADMIN_SERVICE_URL))
                 .route("job-docs", r -> r.path(JOB_ROUTE_SWAGGER)
                         .uri(JOB_SERVICE_URL))
+                .route("interview-docs", r -> r.path(INTERVIEW_SERVICE_ROUTE_SWAGGER)
+                        .uri(INTERVIEW_SERVICE_URL))
 
                 // ==== USER SERVICE ROUTES (localhost:8081) ====
                 .route("user_register", r -> r.path(USER_ROUTE_REGISTER)

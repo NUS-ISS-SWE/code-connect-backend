@@ -1,7 +1,13 @@
 server:
-  port: 8084
+  port: 8083
 
 # Custom properties
 cdcnt:
   services:
-    user-service-url: http://localhost:8082/api/v1
+    user-service:
+      url: http://localhost:8082
+      get-all-employer-profiles: /employer-profiles
+      review-employer:
+
+    job-service:
+      url: http://localhost:8083

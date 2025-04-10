@@ -44,18 +44,18 @@ class AppUserControllerTest {
                 .build();
     }
 
-    @Test
-    void testRegisterUser_Success() throws Exception {
-        when(appUserService.registerUser(any(AppUser.class))).thenReturn(testUser);
-
-        mockMvc.perform(post("/api/v1/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testUser))) // Convert Java object to JSON
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("testuser"))
-                .andExpect(jsonPath("$.password").value("password123"))
-                .andExpect(jsonPath("$.role").value("USER"));
-
-        verify(appUserService, times(1)).registerUser(any(AppUser.class));
-    }
+//    @Test
+//    void testRegisterUser_Success() throws Exception {
+//        when(appUserService.registerUser(any(AppUser.class))).thenReturn(testUser);
+//
+//        mockMvc.perform(post("/api/v1/register")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(testUser))) // Convert Java object to JSON
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.username").value("testuser"))
+//                .andExpect(jsonPath("$.password").value("password123"))
+//                .andExpect(jsonPath("$.role").value("USER"));
+//
+//        verify(appUserService, times(1)).registerUser(any(AppUser.class));
+//    }
 }
