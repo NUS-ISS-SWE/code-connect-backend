@@ -138,7 +138,7 @@ public class AppUserServiceImpl implements AppUserService {
             user.setStatus(AppConstants.ACTIVE);
             appUserRepository.save(user);
         } else {
-            throw new RuntimeException("User is under review");
+            throw new RuntimeException("User is pending review");
         }
     }
 

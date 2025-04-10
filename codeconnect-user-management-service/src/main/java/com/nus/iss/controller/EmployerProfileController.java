@@ -29,7 +29,7 @@ public class EmployerProfileController {
         return employerProfileService.getAllProfiles();
     }
 
-    @PostMapping("/review-employer-profile")
+    @PostMapping("/review-employer-profiles")
     public ResponseEntity<AppUserDTO> reviewEmployerProfile(@RequestBody AppUserDTO appUserDTO) {
         log.info("Reviewing employer profile: {}", appUserDTO);
         return ResponseEntity.ok(employerProfileService.reviewEmployerProfile(appUserDTO));
@@ -50,8 +50,9 @@ public class EmployerProfileController {
         return employerProfileService.updateProfile(id, profile);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteProfile(@PathVariable Long id) {
-        employerProfileService.deleteProfile(id);
+    @DeleteMapping("/employer-profiles")
+    public void deleteProfile(@RequestParam String username) {
+        log.info("Deleting employer profile: {}", username);
+        employerProfileService.deleteProfile(username);
     }
 }

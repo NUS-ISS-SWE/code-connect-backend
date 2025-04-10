@@ -30,4 +30,12 @@ public class NotificationServiceImpl implements NotificationService {
         javaMailSender.send(message);
     }
 
+    @Override
+    public void sendDeletionEmail(AppUser appUser) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(appUser.getEmail());
+        message.setSubject("Your CodeConnect account has been deleted");
+        message.setText("Your CodeConnect account has been deleted. If you did not request this, please contact support.");
+        javaMailSender.send(message);
+    }
 }

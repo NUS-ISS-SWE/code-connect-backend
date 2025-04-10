@@ -45,13 +45,13 @@ public class GatewayConfig {
                         .uri(USER_SERVICE_URL))
 
                 // ==== ADMIN SERVICE ROUTES (localhost:8082) ====
-                .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_EMPLOYERS)
+                .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
                 .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
-                .route("admin_get_employees", r -> r.path(ADMIN_ROUTE_EMPLOYEES)
+                .route("admin_delete_employees", r -> r.path(ADMIN_ROUTE_DELETE_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
 

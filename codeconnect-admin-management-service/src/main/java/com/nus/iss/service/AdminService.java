@@ -9,6 +9,8 @@ public interface AdminService {
     List<AppUserDTO> getAllEmployerProfiles();
 
     AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
+
+    void deleteProfile(String username);
 //
 //    void getListOfEmployees();
 //

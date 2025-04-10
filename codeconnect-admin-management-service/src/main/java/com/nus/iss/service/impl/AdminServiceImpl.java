@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -42,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
     public AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO) {
         log.info("Reviewing employer profile: {}", appUserDTO);
         String url = cdcntProperties.getServices().getUserService().getUrl()
-                .concat(cdcntProperties.getServices().getUserService().getReviewEmployerProfile());
+                .concat(cdcntProperties.getServices().getUserService().getReviewEmployerProfiles());
 
         AppUserDTO response = restClient.post()
                 .uri(url)
@@ -52,5 +54,24 @@ public class AdminServiceImpl implements AdminService {
                 });
         log.info("Reviewed employer profile: {}", response);
         return response;
+    }
+
+    @Override
+    public void deleteProfile(String username) {
+        log.info("Deleting employer profile: {}", username);
+        String url = cdcntProperties.getServices().getUserService().getUrl()
+                .concat(cdcntProperties.getServices().getUserService().getDeleteEmployerProfiles());
+
+        URI uri = UriComponentsBuilder
+                .fromUri(URI.create(url))
+                .queryParam("username", username)
+                .build()
+                .toUri();
+
+        restClient.delete()
+                .uri(uri)
+                .retrieve()
+                .body(new ParameterizedTypeReference<Void>() {
+                });
     }
 }

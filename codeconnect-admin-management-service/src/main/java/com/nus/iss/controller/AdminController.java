@@ -28,10 +28,17 @@ public class AdminController {
         return ResponseEntity.ok(employerProfiles);
     }
 
-    @PostMapping("/review-employer-profile")
+    @PostMapping("/review-employer-profiles")
     public ResponseEntity<AppUserDTO> reviewEmployerProfile(@RequestBody AppUserDTO appUserDTO) {
         log.info("Reviewing employer profile: {}", appUserDTO);
         AppUserDTO reviewedProfile = adminService.reviewEmployerProfile(appUserDTO);
         return ResponseEntity.ok(reviewedProfile);
+    }
+
+    @DeleteMapping("/employer-profiles")
+    public ResponseEntity<Void> deleteProfile(@RequestParam String username) {
+        log.info("Deleting employer profile: {}", username);
+        adminService.deleteProfile(username);
+        return ResponseEntity.noContent().build();
     }
 }

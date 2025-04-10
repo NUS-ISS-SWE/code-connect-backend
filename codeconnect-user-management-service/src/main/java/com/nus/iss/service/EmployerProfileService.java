@@ -17,7 +17,7 @@ public interface EmployerProfileService {
 
     EmployerProfile updateProfile(Long id, EmployerProfile updatedProfile);
 
-    void deleteProfile(Long id);
+    void deleteProfile(String username);
 
 
 }

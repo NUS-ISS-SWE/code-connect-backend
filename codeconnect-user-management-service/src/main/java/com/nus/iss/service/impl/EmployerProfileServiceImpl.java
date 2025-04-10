@@ -90,7 +90,16 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     }
 
     @Override
-    public void deleteProfile(Long id) {
-        employerProfileRepository.deleteById(id);
+    public void deleteProfile(String username) {
+        log.info("Deleting employer profile: {}", username);
+        Optional<AppUser> byUsername = appUserRepository.findByUsername(username);
+        if (byUsername.isPresent()) {
+            AppUser appUser = byUsername.get();
+            appUserRepository.deleteById(appUser.getId());
+            log.info("Deleted employer profile: {}", username);
+            notificationService.sendDeletionEmail(appUser);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
     }
 }
