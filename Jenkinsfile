@@ -46,6 +46,26 @@ pipeline {
             }
         }
 
+        stage('Static Security Scan (SAST)') {
+            when {
+                expression { return params.TESTS_EXECUTION }
+            }
+            steps {
+                script {
+                    echo '🔒 Running OWASP Dependency-Check...'
+                    sh """
+                        mvn org.owasp:dependency-check-maven:check -pl ${params.MICROSERVICE_NAME}
+                    """
+
+                    echo '🕵️‍♂️ Running Trivy secret/config scan...'
+                    sh """
+                        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -
+                        ./trivy fs --scanners secret ${params.MICROSERVICE_NAME} || true
+                    """
+                }
+            }
+        }
+
         stage('Test & Quality Checks') {
             when {
                 expression { return params.TESTS_EXECUTION }
