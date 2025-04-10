@@ -1,4 +1,6 @@
-package com.nus.iss;
+package com.nus.iss.controller;
+
+import com.nus.iss.service.SkillsAssessmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

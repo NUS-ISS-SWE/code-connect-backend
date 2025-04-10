@@ -31,6 +31,8 @@ public class GatewayConfig {
                         .uri(ADMIN_SERVICE_URL))
                 .route("job-docs", r -> r.path(JOB_ROUTE_SWAGGER)
                         .uri(JOB_SERVICE_URL))
+                .route("interview-docs", r -> r.path(INTERVIEW_SERVICE_ROUTE_SWAGGER)
+                        .uri(INTERVIEW_SERVICE_URL))
 
                 // ==== USER SERVICE ROUTES (localhost:8081) ====
                 .route("user_register", r -> r.path(USER_ROUTE_REGISTER)
@@ -43,13 +45,13 @@ public class GatewayConfig {
                         .uri(USER_SERVICE_URL))
 
                 // ==== ADMIN SERVICE ROUTES (localhost:8082) ====
-                .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_EMPLOYERS)
+                .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
-                .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYERS)
+                .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
-                .route("admin_get_employees", r -> r.path(ADMIN_ROUTE_EMPLOYEES)
+                .route("admin_delete_employees", r -> r.path(ADMIN_ROUTE_DELETE_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
 

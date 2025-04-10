@@ -1,5 +1,6 @@
 package com.nus.iss.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,4 +21,13 @@ public class AppUser {
     private String role;
     private String email;
     private String status;
+
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private EmployerProfile employerProfile;
+
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private EmployeeProfile employeeProfile;
+
 }

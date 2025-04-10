@@ -15,6 +15,17 @@ public class CdcntProperties {
     @Getter
     @Setter
     public static class Services {
-        private String userServiceUrl;
+        private UserService userService;
+
+
+        @Getter
+        @Setter
+        public static class UserService {
+            private String url;
+            private String getAllEmployerProfiles;
+            private String reviewEmployerProfiles;
+            private String deleteEmployerProfiles;
+
+        }
     }
 }

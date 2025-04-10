@@ -18,6 +18,8 @@ springdoc:
         url: http://localhost:8083/v3/api-docs
       - name: job-service
         url: http://localhost:8084/v3/api-docs
+      - name: interview-service
+        url: http://localhost:8085/v3/api-docs
 
 # Custom properties
 cdcnt:
