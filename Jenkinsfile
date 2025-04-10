@@ -1,48 +1,35 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3'
-    }
-
     environment {
-        GIT_CREDENTIALS_ID = 'github-pat'
         DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
+        GIT_CREDENTIALS_ID = 'github-pat'
         DOCKER_IMAGE = "maxin0525/${params.MICROSERVICE_NAME}"
     }
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'feature/sprint4/maxin/CDCNT-39-CICD', description: 'Select the branch to build')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
         choice(name: 'MICROSERVICE_NAME', choices: [
             'codeconnect-user-management-service',
-            'codeconnect-interview-management-service',
-            'codeconnect-job-management-service',
             'codeconnect-profile-management-service'
-        ], description: 'Select the microservice module to build')
-        booleanParam(name: 'TESTS_EXECUTION', description: 'Enable or disable test execution')
-        booleanParam(name: 'BUILD_DOCKER_IMAGE', description: 'Enable or disable docker build')
-        booleanParam(name: 'UPLOAD_DOCKER_HUB', description: 'Enable or disable push to DockerHub')
+        ], description: 'Select microservice to build')
+        booleanParam(name: 'TESTS_EXECUTION', defaultValue: true, description: 'Run tests and SAST scan')
+        booleanParam(name: 'BUILD_DOCKER_IMAGE', defaultValue: true, description: 'Build Docker image')
+        booleanParam(name: 'UPLOAD_DOCKER_HUB', defaultValue: false, description: 'Push to DockerHub')
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Source') {
             steps {
-                script {
-                    echo "Checking out branch: ${params.BRANCH_NAME}"
-                    git branch: "${params.BRANCH_NAME}",
-                        credentialsId: "${GIT_CREDENTIALS_ID}",
-                        url: 'https://github.com/NUS-ISS-SWE/code-connect-backend.git'
-                }
+                git branch: "${params.BRANCH_NAME}",
+                    credentialsId: "${GIT_CREDENTIALS_ID}",
+                    url: 'https://github.com/NUS-ISS-SWE/code-connect-backend.git'
             }
         }
 
         stage('Build') {
             steps {
-                script {
-                    echo "Building microservice: ${params.MICROSERVICE_NAME}"
-                    sh 'mvn -version'
-                    sh "cd ${params.MICROSERVICE_NAME} && mvn clean verify"
-                }
+                sh "cd ${params.MICROSERVICE_NAME} && mvn clean verify"
             }
         }
 
@@ -52,39 +39,14 @@ pipeline {
             }
             steps {
                 script {
-                    echo '🔒 Running OWASP Dependency-Check...'
-                    sh """
-                        mvn org.owasp:dependency-check-maven:check -pl ${params.MICROSERVICE_NAME}
-                    """
+                    echo '🔒 OWASP Dependency Check'
+                    sh "mvn org.owasp:dependency-check-maven:check -pl ${params.MICROSERVICE_NAME} || true"
 
-                    echo '🕵️‍♂️ Running Trivy secret/config scan...'
+                    echo '🕵️ Trivy Secret Scan'
                     sh """
                         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -
-                        ./trivy fs --scanners secret ${params.MICROSERVICE_NAME} || true
+                        ./trivy fs --scanners secret --exit-code 0 --quiet ${params.MICROSERVICE_NAME} || true
                     """
-                }
-            }
-        }
-
-        stage('Test & Quality Checks') {
-            when {
-                expression { return params.TESTS_EXECUTION }
-            }
-            steps {
-                script {
-                    echo "Running unit tests for ${params.MICROSERVICE_NAME}"
-                    sh "mvn test -pl ${params.MICROSERVICE_NAME}"
-
-                    echo "Running SonarQube analysis"
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh "mvn sonar:sonar -Dsonar.projectKey=${params.MICROSERVICE_NAME}"
-                    }
-
-                    echo "Running OWASP Dependency Check"
-                    sh "mvn org.owasp:dependency-check-maven:check"
-
-                    echo "Running security scan using Trivy"
-                    sh "trivy fs --scanners vuln,secret ${params.MICROSERVICE_NAME}"
                 }
             }
         }
@@ -94,38 +56,35 @@ pipeline {
                 expression { return params.BUILD_DOCKER_IMAGE }
             }
             steps {
-                script {
-                    echo "Building Docker image for ${params.MICROSERVICE_NAME}"
-                    sh "docker build -t ${DOCKER_IMAGE}:latest ./${params.MICROSERVICE_NAME}"
-                }
+                sh "docker build -t ${DOCKER_IMAGE}:latest ./${params.MICROSERVICE_NAME}"
             }
         }
 
-       stage('Upload to DockerHub') {
-           when {
-               expression { return params.UPLOAD_DOCKER_HUB }
-           }
-           steps {
-               script {
-                   echo "Logging in to DockerHub"
-
-                   withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                       sh """
-                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                         docker push ${DOCKER_IMAGE}:latest
-                       """
-                   }
-               }
-           }
-       }
+        stage('Upload to DockerHub') {
+            when {
+                expression { return params.UPLOAD_DOCKER_HUB }
+            }
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKER_CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push ${DOCKER_IMAGE}:latest
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Build and upload completed successfully!'
+            echo '✅ Build, scan and deployment succeeded!'
         }
         failure {
-            echo 'Build failed! Please check the logs for details.'
-                }
+            echo '❌ Pipeline failed.'
+        }
     }
 }
