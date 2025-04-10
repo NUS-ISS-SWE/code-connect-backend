@@ -7,6 +7,8 @@ import java.util.List;
 public interface AdminService {
 
     List<AppUserDTO> getAllEmployerProfiles();
+
+    AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
 //
 //    void getListOfEmployees();
 //

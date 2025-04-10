@@ -23,6 +23,8 @@ public class CdcntProperties {
         public static class UserService {
             private String url;
             private String getAllEmployerProfiles;
+            private String reviewEmployerProfile;
+
         }
     }
 }

@@ -7,7 +7,7 @@ cdcnt:
     user-service:
       url: http://localhost:8082
       get-all-employer-profiles: /employer-profiles
-      review-employer:
+      review-employer-profile: /review-employer-profile
 
     job-service:
       url: http://localhost:8083

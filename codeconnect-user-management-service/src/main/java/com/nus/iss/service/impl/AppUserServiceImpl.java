@@ -11,11 +11,10 @@ import com.nus.iss.repository.AppUserRepository;
 import com.nus.iss.repository.EmployeeProfileRepository;
 import com.nus.iss.repository.EmployerProfileRepository;
 import com.nus.iss.service.AppUserService;
+import com.nus.iss.service.NotificationService;
 import com.nus.iss.util.JsonMappingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final EmployeeProfileRepository employeeProfileRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtConfig jwtConfig;
-    private final JavaMailSender javaMailSender;
+    private final NotificationService notificationService;
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
@@ -38,13 +37,13 @@ public class AppUserServiceImpl implements AppUserService {
                                EmployeeProfileRepository employeeProfileRepository,
                                PasswordEncoder passwordEncoder,
                                JwtConfig jwtConfig,
-                               JavaMailSender javaMailSender) {
+                              NotificationService notificationService) {
         this.appUserRepository = appUserRepository;
         this.employerProfileRepository = employerProfileRepository;
         this.employeeProfileRepository = employeeProfileRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtConfig = jwtConfig;
-        this.javaMailSender = javaMailSender;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -60,9 +59,9 @@ public class AppUserServiceImpl implements AppUserService {
             return AppUserDTO.builder()
                     .id(savedAppUser.getId())
                     .username(savedAppUser.getUsername())
-                    .password(savedAppUser.getPassword())
                     .email(savedAppUser.getEmail())
                     .role(savedAppUser.getRole())
+                    .status(savedAppUser.getStatus())
                     .companyName(savedEmployer.getCompanyName())
                     .companySize(savedEmployer.getCompanySize())
                     .industry(savedEmployer.getIndustry())
@@ -75,7 +74,7 @@ public class AppUserServiceImpl implements AppUserService {
             AppUser savedAppUser = appUserRepository.save(appUser);
             EmployeeProfile savedEmployee = employeeProfileRepository.save(appUser.getEmployeeProfile());
 
-//            javaMailSender.send(prepareEmail(savedAppUser));
+            notificationService.sendActivationEmail(savedAppUser);
 
             return AppUserDTO.builder()
                     .id(savedAppUser.getId())
@@ -149,15 +148,4 @@ public class AppUserServiceImpl implements AppUserService {
         }
         log.info("Validation passed for user: {}", appUserDTO.getUsername());
     }
-
-
-    private SimpleMailMessage prepareEmail(AppUser savedAppUser) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(savedAppUser.getEmail());
-        message.setSubject("Activate your CodeConnect account");
-        message.setText("Please click the link to activate your account: http://localhost:8080/api/v1/activate?token="
-                + Base64.getEncoder().encodeToString(savedAppUser.getUsername().getBytes()));
-        return message;
-    }
-
 }

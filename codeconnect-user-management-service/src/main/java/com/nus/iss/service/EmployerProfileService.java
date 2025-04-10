@@ -7,13 +7,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployerProfileService {
-    EmployerProfile createProfile(EmployerProfile profile);
-
     List<AppUserDTO> getAllProfiles();
+
+    AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
+
+    EmployerProfile createProfile(EmployerProfile profile);
 
     Optional<EmployerProfile> getProfileById(Long id);
 
     EmployerProfile updateProfile(Long id, EmployerProfile updatedProfile);
 
     void deleteProfile(Long id);
+
+
 }

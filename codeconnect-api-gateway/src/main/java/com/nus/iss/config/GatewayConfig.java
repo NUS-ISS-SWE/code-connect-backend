@@ -48,7 +48,7 @@ public class GatewayConfig {
                 .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
-                .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYERS)
+                .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(ADMIN_SERVICE_URL))
                 .route("admin_get_employees", r -> r.path(ADMIN_ROUTE_EMPLOYEES)

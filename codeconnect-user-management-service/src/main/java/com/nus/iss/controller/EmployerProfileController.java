@@ -3,14 +3,17 @@ package com.nus.iss.controller;
 import com.nus.iss.dto.AppUserDTO;
 import com.nus.iss.entity.EmployerProfile;
 import com.nus.iss.service.EmployerProfileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/employer-profiles")
+@Slf4j
+@RequestMapping()
 public class EmployerProfileController {
 
     private final EmployerProfileService employerProfileService;
@@ -20,12 +23,19 @@ public class EmployerProfileController {
         this.employerProfileService = employerProfileService;
     }
 
-    @GetMapping
+    @GetMapping("/employer-profiles")
     public List<AppUserDTO> getAllProfiles() {
+        log.info("Fetching all employer profiles");
         return employerProfileService.getAllProfiles();
     }
 
-    @PostMapping
+    @PostMapping("/review-employer-profile")
+    public ResponseEntity<AppUserDTO> reviewEmployerProfile(@RequestBody AppUserDTO appUserDTO) {
+        log.info("Reviewing employer profile: {}", appUserDTO);
+        return ResponseEntity.ok(employerProfileService.reviewEmployerProfile(appUserDTO));
+    }
+
+    @PostMapping("/employer-profiles")
     public EmployerProfile createProfile(@RequestBody EmployerProfile profile) {
         return employerProfileService.createProfile(profile);
     }

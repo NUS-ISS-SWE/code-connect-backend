@@ -29,12 +29,28 @@ public class AdminServiceImpl implements AdminService {
         String url = cdcntProperties.getServices().getUserService().getUrl()
                 .concat(cdcntProperties.getServices().getUserService().getGetAllEmployerProfiles());
 
-        List<AppUserDTO> body = restClient.get()
+        List<AppUserDTO> response = restClient.get()
                 .uri(url)
                 .retrieve()
                 .body(new ParameterizedTypeReference<List<AppUserDTO>>() {
                 });
-        log.info("List of employer users: {}", body);
-        return body;
+        log.info("List of employer users: {}", response);
+        return response;
+    }
+
+    @Override
+    public AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO) {
+        log.info("Reviewing employer profile: {}", appUserDTO);
+        String url = cdcntProperties.getServices().getUserService().getUrl()
+                .concat(cdcntProperties.getServices().getUserService().getReviewEmployerProfile());
+
+        AppUserDTO response = restClient.post()
+                .uri(url)
+                .body(appUserDTO)
+                .retrieve()
+                .body(new ParameterizedTypeReference<AppUserDTO>() {
+                });
+        log.info("Reviewed employer profile: {}", response);
+        return response;
     }
 }
