@@ -1,5 +1,7 @@
-package com.nus.iss;
+package com.nus.iss.controller;
 
+import com.nus.iss.model.JobApplication;
+import com.nus.iss.service.JobApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +36,10 @@ public class JobApplicationController {
     public ResponseEntity<Void> deleteJobApplication(@PathVariable Long id) {
         jobApplicationService.deleteJobApplication(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/status")
+    public void updateStatus(@PathVariable Long id, @RequestParam String status) {
+        jobApplicationService.updateApplicationStatus(id, status);
     }
 }

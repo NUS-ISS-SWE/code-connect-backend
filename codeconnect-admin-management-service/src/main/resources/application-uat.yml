@@ -1,0 +1,4 @@
+cdcnt:
+  services:
+    user-service:
+      url: http://user-management-service:8082

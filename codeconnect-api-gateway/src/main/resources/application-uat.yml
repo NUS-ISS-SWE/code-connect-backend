@@ -1,0 +1,5 @@
+cdcnt:
+  user-service: http://user-management-service:8082
+  admin-service: http://admin-management-service:8083
+  job-service: http://job-management-service:8084
+  interview-prep-service: http://interview-prep-service:8085
