@@ -6,7 +6,7 @@ public class AppConstants {
     // 8080 for gateway, 8081 for liquibase
 
     // User service URL
-    public final static String USER_SERVICE_URL = "http://localhost:8082";
+//    public final static String USER_SERVICE_URL = "http://localhost:8082";
     public final static String USER_ROUTE_SWAGGER = "/user-service/v3/api-docs";
     public final static String USER_ROUTE_REGISTER = "/api/v1/register";
     public final static String USER_ROUTE_ACTIVATE = "/api/v1/activate";
@@ -15,7 +15,7 @@ public class AppConstants {
     public final static String USER_ROUTE_COMPLIANCE_DATA = "/api/v1/compliance-data";
 
     // Admin service URL
-    public final static String ADMIN_SERVICE_URL = "http://localhost:8083";
+//    public final static String ADMIN_SERVICE_URL = "http://localhost:8083";
     public final static String ADMIN_ROUTE_SWAGGER = "/admin-service/v3/api-docs";
     public final static String ADMIN_ROUTE_GET_ALL_EMPLOYERS = "/api/v1/employer-profiles";
     public final static String ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE = "/api/v1/review-employer-profiles";
@@ -23,11 +23,11 @@ public class AppConstants {
     public final static String ADMIN_ROUTE_EMPLOYEES = "/api/v1/employees";
 
     // Job service URL
-    public final static String JOB_SERVICE_URL = "http://localhost:8084";
+//    public final static String JOB_SERVICE_URL = "http://localhost:8084";
     public final static String JOB_ROUTE_SWAGGER = "/job-service/v3/api-docs";
 
     // Interview prep service URL
-    public final static String INTERVIEW_SERVICE_URL = "http://localhost:8085";
+//    public final static String INTERVIEW_SERVICE_URL = "http://localhost:8085";
     public final static String INTERVIEW_SERVICE_ROUTE_SWAGGER = "/interview-service/v3/api-docs";
 
 

@@ -28,3 +28,7 @@ cdcnt:
       issuer: nus-iss-codeconnect
       secret: bnVzLWlzcy1jb2RlY29ubmVjdC1qd3Qtc2VjcmV0LXRva2Vu
       expirationTimeMillis: 86400000
+  user-service: http://localhost:8082
+  admin-service: http://localhost:8083
+  job-service: http://localhost:8084
+  interview-prep-service: http://localhost:8085
