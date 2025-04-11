@@ -1,0 +1,62 @@
+services:
+  user-management-service:
+    image: 961125mingwei/codeconnect-user-management-service:v1
+    container_name: user-management-service
+    ports:
+      - "8082:8082"
+    networks:
+      - codeconnect-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=uat
+
+  admin-management-service:
+    image: 961125mingwei/codeconnect-admin-management-service:v1
+    container_name: admin-management-service
+    ports:
+      - "8083:8083"
+    networks:
+      - codeconnect-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=uat
+
+  job-management-service:
+    image: 961125mingwei/codeconnect-job-management-service:v1
+    container_name: job-management-service
+    ports:
+      - "8084:8084"
+    networks:
+      - codeconnect-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=uat
+
+  interview-prep-service:
+    image: 961125mingwei/codeconnect-interview-prep-service:v1
+    container_name: interview-prep-service
+    ports:
+      - "8085:8085"
+    networks:
+      - codeconnect-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=uat
+
+  api-gateway:
+    image: 961125mingwei/codeconnect-api-gateway:v1
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - codeconnect-network
+    depends_on:
+      - admin-management-service
+      - job-management-service
+      - interview-prep-service
+      - user-management-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=uat
+
+networks:
+  codeconnect-network:
+    driver: bridge
+
+volumes:
+  codeconnect-data:
