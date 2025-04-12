@@ -1,4 +1,33 @@
 services:
+  postgres-db:
+    image: postgres:17
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: cdcnt_main_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - codeconnect-data:/var/lib/postgresql/data
+    networks:
+      - codeconnect-network
+
+  liquibase-service:
+    image: 961125mingwei/codeconnect-liquibase-service:v1
+    container_name: liquibase-service
+    environment:
+      POSTGRES_DB: cdcnt_main_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    depends_on:
+      - postgres-db
+    ports:
+      - "8081:8081"
+    networks:
+      - codeconnect-network
+
   user-management-service:
     image: 961125mingwei/codeconnect-user-management-service:v1
     container_name: user-management-service
@@ -6,6 +35,8 @@ services:
       - "8082:8082"
     networks:
       - codeconnect-network
+    depends_on:
+      - liquibase-service
     environment:
       - SPRING_PROFILES_ACTIVE=uat
 
@@ -16,6 +47,8 @@ services:
       - "8083:8083"
     networks:
       - codeconnect-network
+    depends_on:
+      - liquibase-service
     environment:
       - SPRING_PROFILES_ACTIVE=uat
 
@@ -26,6 +59,8 @@ services:
       - "8084:8084"
     networks:
       - codeconnect-network
+    depends_on:
+      - liquibase-service
     environment:
       - SPRING_PROFILES_ACTIVE=uat
 
@@ -36,6 +71,8 @@ services:
       - "8085:8085"
     networks:
       - codeconnect-network
+    depends_on:
+      - liquibase-service
     environment:
       - SPRING_PROFILES_ACTIVE=uat
 
@@ -47,6 +84,7 @@ services:
     networks:
       - codeconnect-network
     depends_on:
+      - liquibase-service
       - admin-management-service
       - job-management-service
       - interview-prep-service
