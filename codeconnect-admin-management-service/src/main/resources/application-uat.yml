@@ -1,4 +1,4 @@
 cdcnt:
   services:
     user-service:
-      url: http://user-management-service:8082
+      url: http://user-management-service:8082/api/v1

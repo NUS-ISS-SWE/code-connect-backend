@@ -19,17 +19,33 @@ CREATE TABLE IF NOT EXISTS employee_profile (
     location VARCHAR(255),
     phone VARCHAR(255),
     about_me TEXT,
-    programming_languages VARCHAR(255),
+    programming_language VARCHAR(255),
+    education TEXT,
+    experience TEXT,
+    certification TEXT,
+    skill_set TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    app_user_id INT UNIQUE NOT NULL REFERENCES app_user(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_employee_app_user FOREIGN KEY (app_user_id) REFERENCES app_user(id)
+    app_user_id INT UNIQUE NOT NULL,
+    CONSTRAINT fk_employee_app_user FOREIGN KEY (app_user_id) REFERENCES app_user(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS employer_profile (
     id SERIAL PRIMARY KEY,
     company_name VARCHAR(255),
-    company_size VARCHAR(255),
+    company_description TEXT,
+    company_size INTEGER,
     industry VARCHAR(255),
-    app_user_id BIGINT UNIQUE,
-    CONSTRAINT fk_employer_app_user FOREIGN KEY (app_user_id) REFERENCES app_user(id)
+    company_location VARCHAR(255),
+    app_user_id INT UNIQUE NOT NULL,
+    CONSTRAINT fk_employer_app_user FOREIGN KEY (app_user_id) REFERENCES app_user(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS app_user_media (
+    id SERIAL PRIMARY KEY,
+    profile_picture TEXT,
+    profile_picture_file_name VARCHAR(255),
+    resume_content TEXT,
+    resume_file_name VARCHAR(255),
+    app_user_id INT UNIQUE NOT NULL,
+    CONSTRAINT fk_media_app_user FOREIGN KEY (app_user_id) REFERENCES app_user(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

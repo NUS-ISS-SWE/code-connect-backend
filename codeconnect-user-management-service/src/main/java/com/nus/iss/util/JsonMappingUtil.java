@@ -33,11 +33,11 @@ public class JsonMappingUtil {
             employeeProfile.setLocation(appUserDTO.getLocation());
             employeeProfile.setPhone(appUserDTO.getPhone());
             employeeProfile.setAboutMe(appUserDTO.getAboutMe());
-            employeeProfile.setProgrammingLanguages(appUserDTO.getProgrammingLanguages());
+            employeeProfile.setProgrammingLanguage(appUserDTO.getProgrammingLanguage());
 
             employeeProfile.setEducation(appUserDTO.getEducation());
             employeeProfile.setExperience(appUserDTO.getExperience());
-            employeeProfile.setCertifications(appUserDTO.getCertifications());
+            employeeProfile.setCertification(appUserDTO.getCertification());
             employeeProfile.setSkillSet(appUserDTO.getSkillSet());
 
             employeeProfile.setAppUser(appUser);
@@ -46,5 +46,20 @@ public class JsonMappingUtil {
         } else {
             throw new IllegalArgumentException("Invalid role: " + role);
         }
+    }
+
+    public static AppUserDTO employerProfileToAppUserDTO(EmployerProfile employerProfile, AppUser appUser) {
+        AppUserDTO appUserDTO = new AppUserDTO();
+        appUserDTO.setId(appUser.getId());
+        appUserDTO.setUsername(appUser.getUsername());
+        appUserDTO.setEmail(appUser.getEmail());
+        appUserDTO.setStatus(appUser.getStatus());
+        appUserDTO.setRole(appUser.getRole());
+        appUserDTO.setCompanyName(employerProfile.getCompanyName());
+        appUserDTO.setCompanyDescription(employerProfile.getCompanyDescription());
+        appUserDTO.setCompanySize(employerProfile.getCompanySize());
+        appUserDTO.setIndustry(employerProfile.getIndustry());
+        appUserDTO.setCompanyLocation(employerProfile.getCompanyLocation());
+        return appUserDTO;
     }
 }

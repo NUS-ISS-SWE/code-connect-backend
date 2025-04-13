@@ -5,8 +5,10 @@ import com.nus.iss.config.security.JwtConfig;
 import com.nus.iss.dto.AppUserDTO;
 import com.nus.iss.dto.JwtAccessTokenDTO;
 import com.nus.iss.entity.AppUser;
+import com.nus.iss.entity.AppUserMedia;
 import com.nus.iss.entity.EmployeeProfile;
 import com.nus.iss.entity.EmployerProfile;
+import com.nus.iss.repository.AppUserMediaRepository;
 import com.nus.iss.repository.AppUserRepository;
 import com.nus.iss.repository.EmployeeProfileRepository;
 import com.nus.iss.repository.EmployerProfileRepository;
@@ -30,6 +32,7 @@ public class AppUserServiceImpl implements AppUserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtConfig jwtConfig;
     private final NotificationService notificationService;
+    private final AppUserMediaRepository appUserMediaRepository;
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
@@ -37,13 +40,15 @@ public class AppUserServiceImpl implements AppUserService {
                               EmployeeProfileRepository employeeProfileRepository,
                               PasswordEncoder passwordEncoder,
                               JwtConfig jwtConfig,
-                              NotificationService notificationService) {
+                              NotificationService notificationService,
+                              AppUserMediaRepository appUserMediaRepository) {
         this.appUserRepository = appUserRepository;
         this.employerProfileRepository = employerProfileRepository;
         this.employeeProfileRepository = employeeProfileRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtConfig = jwtConfig;
         this.notificationService = notificationService;
+        this.appUserMediaRepository = appUserMediaRepository;
     }
 
     @Override
@@ -55,6 +60,9 @@ public class AppUserServiceImpl implements AppUserService {
 
             AppUser savedAppUser = appUserRepository.save(appUser);
             EmployerProfile savedEmployer = employerProfileRepository.save(appUser.getEmployerProfile());
+            AppUserMedia appUserMedia = new AppUserMedia();
+            appUserMedia.setAppUser(savedAppUser);
+            appUserMediaRepository.save(appUserMedia);
 
             return AppUserDTO.builder()
                     .id(savedAppUser.getId())
@@ -73,6 +81,9 @@ public class AppUserServiceImpl implements AppUserService {
 
             AppUser savedAppUser = appUserRepository.save(appUser);
             EmployeeProfile savedEmployee = employeeProfileRepository.save(appUser.getEmployeeProfile());
+            AppUserMedia appUserMedia = new AppUserMedia();
+            appUserMedia.setAppUser(savedAppUser);
+            appUserMediaRepository.save(appUserMedia);
 
             notificationService.sendActivationEmail(savedAppUser);
 
@@ -88,10 +99,10 @@ public class AppUserServiceImpl implements AppUserService {
                     .location(savedEmployee.getLocation())
                     .phone(savedEmployee.getPhone())
                     .aboutMe(savedEmployee.getAboutMe())
-                    .programmingLanguages(savedEmployee.getProgrammingLanguages())
+                    .programmingLanguage(savedEmployee.getProgrammingLanguage())
                     .education(savedEmployee.getEducation())
                     .experience(savedEmployee.getExperience())
-                    .certifications(savedEmployee.getCertifications())
+                    .certification(savedEmployee.getCertification())
                     .skillSet(savedEmployee.getSkillSet())
                     .build();
         } else {
