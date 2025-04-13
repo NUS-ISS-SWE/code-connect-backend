@@ -28,6 +28,7 @@
         <module>codeconnect-admin-management-service</module>
         <module>codeconnect-interview-prep-service</module>
         <module>codeconnect-api-gateway</module>
+        <module>codeconnect-liquibase-service</module>
     </modules>
     <scm>
         <connection/>

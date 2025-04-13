@@ -21,7 +21,7 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/employer-profiles")
+    @GetMapping("/list-employer-profiles")
     public ResponseEntity<List<AppUserDTO>> getAllEmployerProfiles() {
         log.info("Fetching all employer profiles");
         List<AppUserDTO> employerProfiles = adminService.getAllEmployerProfiles();

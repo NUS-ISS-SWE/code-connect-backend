@@ -8,6 +8,7 @@ import com.nus.iss.repository.AppUserRepository;
 import com.nus.iss.repository.EmployerProfileRepository;
 import com.nus.iss.service.EmployerProfileService;
 import com.nus.iss.service.NotificationService;
+import com.nus.iss.util.JsonMappingUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,6 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     }
 
     @Override
-    public EmployerProfile createProfile(EmployerProfile profile) {
-        return employerProfileRepository.save(profile);
-    }
-
-    @Override
     public List<AppUserDTO> getAllProfiles() {
         log.info("Fetching list of employer users");
         List<AppUserDTO> list = employerProfileRepository.findAll()
@@ -49,8 +45,10 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
                     appUserDTO.setStatus(user.getAppUser().getStatus());
                     appUserDTO.setRole(user.getAppUser().getRole());
                     appUserDTO.setCompanyName(user.getCompanyName());
+                    appUserDTO.setCompanyDescription(user.getCompanyDescription());
                     appUserDTO.setCompanySize(user.getCompanySize());
                     appUserDTO.setIndustry(user.getIndustry());
+                    appUserDTO.setCompanyLocation(user.getCompanyLocation());
                     return appUserDTO;
                 }).toList();
         log.info("List of employer users: {}", list);
@@ -75,22 +73,7 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     }
 
     @Override
-    public Optional<EmployerProfile> getProfileById(Long id) {
-        return employerProfileRepository.findById(id);
-    }
-
-    @Override
-    public EmployerProfile updateProfile(Long id, EmployerProfile updatedProfile) {
-        EmployerProfile profile = employerProfileRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("EmployerProfile not found"));
-        profile.setCompanyName(updatedProfile.getCompanyName());
-        profile.setCompanySize(updatedProfile.getCompanySize());
-        profile.setIndustry(updatedProfile.getIndustry());
-        return employerProfileRepository.save(profile);
-    }
-
-    @Override
-    public void deleteProfile(String username) {
+    public void deleteEmployerProfile(String username) {
         log.info("Deleting employer profile: {}", username);
         Optional<AppUser> byUsername = appUserRepository.findByUsername(username);
         if (byUsername.isPresent()) {
@@ -102,4 +85,46 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
             throw new IllegalArgumentException("User not found");
         }
     }
+
+    @Override
+    public AppUserDTO getEmployerProfile(String username) {
+        log.info("Fetching employer profile for user: {}", username);
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isPresent()) {
+            AppUser appUser1 = appUser.get();
+            Optional<EmployerProfile> employerProfile = employerProfileRepository.findByAppUser(appUser1);
+            if (employerProfile.isPresent()) {
+                return JsonMappingUtil.employerProfileToAppUserDTO(employerProfile.get(), appUser1);
+            } else {
+                throw new IllegalArgumentException("Employer profile not found");
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+    @Override
+    public AppUserDTO updateEmployerProfile(String username, EmployerProfile profile) {
+        log.info("Updating employer profile for user: {}", username);
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isPresent()) {
+            AppUser user = appUser.get();
+            Optional<EmployerProfile> employerProfile = employerProfileRepository.findByAppUser(user);
+            if (employerProfile.isPresent()) {
+                EmployerProfile employerProfile1 = employerProfile.get();
+                employerProfile1.setCompanyName(profile.getCompanyName());
+                employerProfile1.setCompanyDescription(profile.getCompanyDescription());
+                employerProfile1.setCompanySize(profile.getCompanySize());
+                employerProfile1.setIndustry(profile.getIndustry());
+                EmployerProfile savedEmployerProfile = employerProfileRepository.save(employerProfile1);
+                return JsonMappingUtil.employerProfileToAppUserDTO(savedEmployerProfile, user);
+            } else {
+                throw new IllegalArgumentException("Employer profile not found");
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+    }
+
+
 }

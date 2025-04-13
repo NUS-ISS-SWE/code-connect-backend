@@ -4,20 +4,15 @@ import com.nus.iss.dto.AppUserDTO;
 import com.nus.iss.entity.EmployerProfile;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployerProfileService {
     List<AppUserDTO> getAllProfiles();
 
     AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
 
-    EmployerProfile createProfile(EmployerProfile profile);
+    void deleteEmployerProfile(String username);
 
-    Optional<EmployerProfile> getProfileById(Long id);
+    AppUserDTO getEmployerProfile(String username);
 
-    EmployerProfile updateProfile(Long id, EmployerProfile updatedProfile);
-
-    void deleteProfile(String username);
-
-
+    AppUserDTO updateEmployerProfile(String username, EmployerProfile profile);
 }
