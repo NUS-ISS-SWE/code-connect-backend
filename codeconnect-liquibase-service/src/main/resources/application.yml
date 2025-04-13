@@ -1,4 +1,10 @@
+server:
+  port: 8081
+
 spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yml
   datasource:
     url: jdbc:postgresql://postgres-db:5432/cdcnt_main_db
     username: postgres
@@ -6,6 +12,3 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: none
-    show-sql: false

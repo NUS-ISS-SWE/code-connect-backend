@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,8 +20,10 @@ public class AppUserDTO {
 
     // Employer Profile
     private String companyName;
-    private String companySize;
+    private String companyDescription;
+    private Integer companySize;
     private String industry;
+    private String companyLocation;
 
     // Employee Profile
     private String fullName;
@@ -32,10 +32,10 @@ public class AppUserDTO {
     private String location;
     private String phone;
     private String aboutMe;
-    private String programmingLanguages;
-    private List<String> education;
-    private List<String> experience;
-    private List<String> certifications;
-    private List<String> skillSet;
+    private String programmingLanguage;
+    private String education;
+    private String experience;
+    private String certification;
+    private String skillSet;
 
 }

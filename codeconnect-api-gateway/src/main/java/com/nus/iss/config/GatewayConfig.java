@@ -43,7 +43,11 @@ public class GatewayConfig {
                         .uri(cdcntProperties.getUserService()))
                 .route("user_login", r -> r.path(USER_ROUTE_LOGIN)
                         .uri(cdcntProperties.getUserService()))
-                .route("compliance_data", r -> r.path(USER_ROUTE_COMPLIANCE_DATA)
+                .route("user_employer_profile", r -> r.path(USER_ROUTE_EMPLOYER_PROFILE)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYER))))
+                        .uri(cdcntProperties.getUserService()))
+                .route("user_employer_profile_picture", r -> r.path(USER_ROUTE_EMPLOYER_PROFILE_PICTURE)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYER))))
                         .uri(cdcntProperties.getUserService()))
 
                 // ==== ADMIN SERVICE ROUTES (localhost:8082) ====

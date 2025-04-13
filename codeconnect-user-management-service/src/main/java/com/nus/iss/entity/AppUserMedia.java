@@ -1,6 +1,5 @@
 package com.nus.iss.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,20 +9,19 @@ import lombok.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "employer_profile")
-public class EmployerProfile {
+@Table(name = "app_user_media")
+public class AppUserMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String companyName;
-    private String companyDescription;
-    private Integer companySize;
-    private String industry;
-    private String companyLocation;
+
+    private String profilePicture;
+    private String profilePictureFileName;
+
+    private String resumeContent;
+    private String resumeFileName;
 
     @OneToOne
     @JoinColumn(name = "app_user_id", unique = true)
-    @JsonBackReference
     private AppUser appUser;
-
 }
