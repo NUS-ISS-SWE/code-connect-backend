@@ -74,4 +74,18 @@ public class AdminServiceImpl implements AdminService {
                 .body(new ParameterizedTypeReference<Void>() {
                 });
     }
+
+    @Override
+    public List<AppUserDTO> getAllEmployeeProfiles() {
+        log.info("Fetching list of employee users from user service");
+        String url = cdcntProperties.getServices().getUserService().getUrl()
+                .concat(cdcntProperties.getServices().getUserService().getGetAllEmployeeProfiles());
+        List<AppUserDTO> response = restClient.get()
+                .uri(url)
+                .retrieve()
+                .body(new ParameterizedTypeReference<List<AppUserDTO>>() {
+                });
+        log.info("List of employee users: {}", response);
+        return response;
+    }
 }

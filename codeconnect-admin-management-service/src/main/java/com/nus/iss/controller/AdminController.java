@@ -28,6 +28,13 @@ public class AdminController {
         return ResponseEntity.ok(employerProfiles);
     }
 
+    @GetMapping("/list-employee-profiles")
+    public ResponseEntity<List<AppUserDTO>> getAllEmployeeProfiles() {
+        log.info("Fetching all employee profiles");
+        List<AppUserDTO> employerProfiles = adminService.getAllEmployeeProfiles();
+        return ResponseEntity.ok(employerProfiles);
+    }
+
     @PostMapping("/review-employer-profiles")
     public ResponseEntity<AppUserDTO> reviewEmployerProfile(@RequestBody AppUserDTO appUserDTO) {
         log.info("Reviewing employer profile: {}", appUserDTO);

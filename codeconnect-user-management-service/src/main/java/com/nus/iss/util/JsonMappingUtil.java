@@ -62,4 +62,26 @@ public class JsonMappingUtil {
         appUserDTO.setCompanyLocation(employerProfile.getCompanyLocation());
         return appUserDTO;
     }
+
+    public static AppUserDTO employeeProfileToAppUserDTO(EmployeeProfile employeeProfile, AppUser appUser) {
+        AppUserDTO appUserDTO = new AppUserDTO();
+        appUserDTO.setId(appUser.getId());
+        appUserDTO.setUsername(appUser.getUsername());
+        appUserDTO.setEmail(appUser.getEmail());
+        appUserDTO.setStatus(appUser.getStatus());
+        appUserDTO.setRole(appUser.getRole());
+        appUserDTO.setFullName(employeeProfile.getFullName());
+        appUserDTO.setJobTitle(employeeProfile.getJobTitle());
+        appUserDTO.setCurrentCompany(employeeProfile.getCurrentCompany());
+        appUserDTO.setLocation(employeeProfile.getLocation());
+        appUserDTO.setPhone(employeeProfile.getPhone());
+        appUserDTO.setAboutMe(employeeProfile.getAboutMe());
+        appUserDTO.setProgrammingLanguage(employeeProfile.getProgrammingLanguage());
+        appUserDTO.setEducation(employeeProfile.getEducation());
+        appUserDTO.setExperience(employeeProfile.getExperience());
+        appUserDTO.setCertification(employeeProfile.getCertification());
+        appUserDTO.setSkillSet(employeeProfile.getSkillSet());
+
+        return appUserDTO;
+    }
 }

@@ -6,7 +6,7 @@ import com.nus.iss.entity.EmployerProfile;
 import java.util.List;
 
 public interface EmployerProfileService {
-    List<AppUserDTO> getAllProfiles();
+    List<AppUserDTO> getAllEmployerProfiles();
 
     AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
 

@@ -13,13 +13,17 @@ public class AppConstants {
     public final static String USER_ROUTE_FORGOT_PASSWORD = "/api/v1/forgot-password";
     public final static String USER_ROUTE_EMPLOYER_PROFILE = "/api/v1/employer-profiles";
     public final static String USER_ROUTE_EMPLOYER_PROFILE_PICTURE = "/api/v1/employer-profiles-picture";
+    public final static String USER_ROUTE_EMPLOYEE_PROFILE = "/api/v1/employee-profiles";
+    public final static String USER_ROUTE_EMPLOYEE_PROFILE_PICTURE = "/api/v1/employee-profiles-picture";
+    public final static String USER_ROUTE_EMPLOYEE_RESUME = "/api/v1/employee-resume";
+
 
     // Admin service URL
     public final static String ADMIN_ROUTE_SWAGGER = "/admin-service/v3/api-docs";
     public final static String ADMIN_ROUTE_GET_ALL_EMPLOYERS = "/api/v1/list-employer-profiles";
     public final static String ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE = "/api/v1/review-employer-profiles";
-    public final static String ADMIN_ROUTE_DELETE_EMPLOYERS = "/api/v1/employer-profiles";
-    public final static String ADMIN_ROUTE_EMPLOYEES = "/api/v1/employees";
+    public final static String ADMIN_ROUTE_DELETE_EMPLOYER = "/api/v1/employer-profiles";
+    public final static String ADMIN_ROUTE_GET_ALL_EMPLOYEES = "/api/v1/list-employee-profiles";
 
     // Job service URL
     public final static String JOB_ROUTE_SWAGGER = "/job-service/v3/api-docs";

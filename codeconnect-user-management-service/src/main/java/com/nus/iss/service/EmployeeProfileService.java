@@ -1,19 +1,15 @@
 package com.nus.iss.service;
 
+import com.nus.iss.dto.AppUserDTO;
 import com.nus.iss.entity.EmployeeProfile;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeProfileService {
-    EmployeeProfile createProfile(EmployeeProfile profile);
 
-    List<EmployeeProfile> getAllProfiles();
+    List<AppUserDTO> getAllEmployeeProfiles();
 
-    Optional<EmployeeProfile> getProfileById(Long id);
+    AppUserDTO getEmployeeProfile(String username);
 
-    EmployeeProfile updateProfile(Long id, EmployeeProfile updatedProfile);
-
-    void deleteProfile(Long id);
-
+    AppUserDTO updateEmployeeProfile(String username, EmployeeProfile profile);
 }
