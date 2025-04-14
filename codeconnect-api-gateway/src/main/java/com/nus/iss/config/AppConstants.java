@@ -24,6 +24,7 @@ public class AppConstants {
     public final static String ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE = "/api/v1/review-employer-profiles";
     public final static String ADMIN_ROUTE_DELETE_EMPLOYER = "/api/v1/employer-profiles";
     public final static String ADMIN_ROUTE_GET_ALL_EMPLOYEES = "/api/v1/list-employee-profiles";
+    public final static String ADMIN_ROUTE_REVIEW_JOB_POSTING = "/api/v1/review-job-posting";
 
     // Job service URL
     public final static String JOB_ROUTE_SWAGGER = "/job-service/v3/api-docs";

@@ -35,6 +35,12 @@ public class JobPostingController {
         return jobPostingService.createJobPosting(jobPosting);
     }
 
+    @PostMapping("/review")
+    public ResponseEntity<JobPosting> reviewJobPosting(@RequestBody JobPosting jobPosting) {
+        JobPosting reviewedJobPosting = jobPostingService.reviewJobPosting(jobPosting);
+        return ResponseEntity.ok(reviewedJobPosting);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJobPosting(@PathVariable Long id) {
         jobPostingService.deleteJobPosting(id);

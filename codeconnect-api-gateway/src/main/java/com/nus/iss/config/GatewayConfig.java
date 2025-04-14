@@ -72,7 +72,9 @@ public class GatewayConfig {
                 .route("admin_get_all_employees", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYEES)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(cdcntProperties.getAdminService()))
-
+                .route("admin_review_job", r -> r.path(ADMIN_ROUTE_REVIEW_JOB_POSTING)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
+                        .uri(cdcntProperties.getAdminService()))
 
                 // ==== JOB SERVICE ROUTES (localhost:8084) ====
 
