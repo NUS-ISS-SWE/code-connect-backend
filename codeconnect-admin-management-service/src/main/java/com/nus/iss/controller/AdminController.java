@@ -1,6 +1,7 @@
 package com.nus.iss.controller;
 
 import com.nus.iss.dto.AppUserDTO;
+import com.nus.iss.dto.JobPostingDTO;
 import com.nus.iss.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,12 @@ public class AdminController {
         log.info("Deleting employer profile: {}", username);
         adminService.deleteProfile(username);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/review-job-posting")
+    public ResponseEntity<JobPostingDTO> reviewJobPosting(@RequestBody JobPostingDTO jobPostingDTO) {
+        log.info("Reviewing job posting: {}", jobPostingDTO);
+        JobPostingDTO reviewJobPosting = adminService.reviewJobPosting(jobPostingDTO);
+        return ResponseEntity.ok(reviewJobPosting);
     }
 }
