@@ -10,4 +10,10 @@ public interface AppUserMediaService {
     String createProfilePicture(String username, MultipartFile file);
 
     void deleteProfilePicture(String username);
+
+    AppUserMedia getResume(String username);
+
+    String createResume(String username, MultipartFile file);
+
+    void deleteResume(String username);
 }

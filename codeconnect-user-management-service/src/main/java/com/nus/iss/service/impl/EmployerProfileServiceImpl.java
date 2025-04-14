@@ -33,7 +33,7 @@ public class EmployerProfileServiceImpl implements EmployerProfileService {
     }
 
     @Override
-    public List<AppUserDTO> getAllProfiles() {
+    public List<AppUserDTO> getAllEmployerProfiles() {
         log.info("Fetching list of employer users");
         List<AppUserDTO> list = employerProfileRepository.findAll()
                 .stream()

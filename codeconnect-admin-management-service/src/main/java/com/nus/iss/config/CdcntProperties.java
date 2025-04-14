@@ -25,6 +25,7 @@ public class CdcntProperties {
             private String getAllEmployerProfiles;
             private String reviewEmployerProfiles;
             private String deleteEmployerProfiles;
+            private String getAllEmployeeProfiles;
 
         }
     }

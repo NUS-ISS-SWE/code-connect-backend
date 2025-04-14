@@ -9,6 +9,7 @@ cdcnt:
       get-all-employer-profiles: /list-employer-profiles
       review-employer-profiles: /review-employer-profiles
       delete-employer-profiles: /employer-profiles
+      get-all-employee-profiles: /list-employee-profiles
 
     job-service:
       url: http://localhost:8083/api/v1

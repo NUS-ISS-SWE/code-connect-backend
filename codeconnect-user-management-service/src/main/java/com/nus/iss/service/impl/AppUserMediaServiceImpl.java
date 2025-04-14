@@ -39,7 +39,10 @@ public class AppUserMediaServiceImpl implements AppUserMediaService {
                     return null;
                 } else {
                     log.info("Profile picture found for user: {}", username);
-                    return appUserMedia.get();
+                    AppUserMedia media = appUserMedia.get();
+                    media.setResumeContent(null);
+                    media.setResumeFileName(null);
+                    return media;
                 }
             }
         } else {
@@ -64,7 +67,6 @@ public class AppUserMediaServiceImpl implements AppUserMediaService {
             if (appUserMedia.isPresent()) {
                 log.info("Updating profile picture for user: {}", username);
                 try {
-
                     AppUserMedia appUserMedia1 = appUserMedia.get();
                     appUserMedia1.setProfilePicture(Base64.getEncoder().encodeToString(file.getBytes()));
                     appUserMedia1.setProfilePictureFileName(file.getOriginalFilename());
@@ -96,6 +98,77 @@ public class AppUserMediaServiceImpl implements AppUserMediaService {
         } else {
             throw new IllegalArgumentException("User not found");
         }
+    }
 
+    @Override
+    public AppUserMedia getResume(String username) {
+        log.info("Fetching resume for user: {}", username);
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isPresent()) {
+            Optional<AppUserMedia> appUserMedia = appUserMediaRepository.findByAppUser(appUser.get());
+            if (appUserMedia.isPresent()) {
+                if (null == appUserMedia.get().getResumeContent()) {
+                    log.warn("Resume is null for user: {}", username);
+                    return null;
+                } else {
+                    log.info("Resume found for user: {}", username);
+                    AppUserMedia media = appUserMedia.get();
+                    media.setProfilePictureFileName(null);
+                    media.setProfilePicture(null);
+                    return media;
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
+        return null;
+    }
+
+    @Override
+    public String createResume(String username, MultipartFile file) {
+        log.info("Creating resume for user: {}", username);
+        try {
+            log.info("File bytes length: {}", file.getBytes().length);
+            log.info("File name: {}", file.getOriginalFilename());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isPresent()) {
+            Optional<AppUserMedia> appUserMedia = appUserMediaRepository.findByAppUser(appUser.get());
+            if (appUserMedia.isPresent()) {
+                log.info("Updating resume for user: {}", username);
+                try {
+                    AppUserMedia appUserMedia1 = appUserMedia.get();
+                    appUserMedia1.setResumeContent(Base64.getEncoder().encodeToString(file.getBytes()));
+                    appUserMedia1.setResumeFileName(file.getOriginalFilename());
+                    appUserMediaRepository.save(appUserMedia1);
+                    return "Resume updated successfully";
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return file.getOriginalFilename();
+    }
+
+    @Override
+    public void deleteResume(String username) {
+        log.info("Deleting resume for user: {}", username);
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isPresent()) {
+            Optional<AppUserMedia> appUserMedia = appUserMediaRepository.findByAppUser(appUser.get());
+            if (appUserMedia.isPresent()) {
+                AppUserMedia appUserMedia1 = appUserMedia.get();
+                appUserMedia1.setResumeContent(null);
+                appUserMedia1.setResumeFileName(null);
+                appUserMediaRepository.save(appUserMedia1);
+                log.info("Resume deleted successfully for user: {}", username);
+            } else {
+                log.warn("No resume found for user: {}", username);
+            }
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
     }
 }

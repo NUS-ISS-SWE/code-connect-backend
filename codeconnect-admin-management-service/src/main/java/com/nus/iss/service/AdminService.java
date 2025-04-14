@@ -11,8 +11,8 @@ public interface AdminService {
     AppUserDTO reviewEmployerProfile(AppUserDTO appUserDTO);
 
     void deleteProfile(String username);
-//
-//    void getListOfEmployees();
+
+    List<AppUserDTO> getAllEmployeeProfiles();
 //
 //    void getListOfJobs();
 //

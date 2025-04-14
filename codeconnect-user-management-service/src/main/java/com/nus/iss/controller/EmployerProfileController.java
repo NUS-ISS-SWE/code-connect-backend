@@ -29,9 +29,9 @@ public class EmployerProfileController {
     }
 
     @GetMapping("/list-employer-profiles")
-    public ResponseEntity<List<AppUserDTO>> getAllProfiles() {
+    public ResponseEntity<List<AppUserDTO>> getAllEmployerProfiles() {
         log.info("Fetching all employer profiles");
-        return ResponseEntity.ok(employerProfileService.getAllProfiles());
+        return ResponseEntity.ok(employerProfileService.getAllEmployerProfiles());
     }
 
     @PostMapping("/review-employer-profiles")
