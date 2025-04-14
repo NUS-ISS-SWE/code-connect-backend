@@ -36,7 +36,7 @@ public class GatewayConfig {
                 .route("interview-docs", r -> r.path(INTERVIEW_SERVICE_ROUTE_SWAGGER)
                         .uri(cdcntProperties.getInterviewPrepService()))
 
-                // ==== USER SERVICE ROUTES (localhost:8081) ====
+                // ==== USER SERVICE ROUTES (localhost:8082) ====
                 .route("user_register", r -> r.path(USER_ROUTE_REGISTER)
                         .uri(cdcntProperties.getUserService()))
                 .route("user_activate", r -> r.path(USER_ROUTE_ACTIVATE)
@@ -49,19 +49,36 @@ public class GatewayConfig {
                 .route("user_employer_profile_picture", r -> r.path(USER_ROUTE_EMPLOYER_PROFILE_PICTURE)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYER))))
                         .uri(cdcntProperties.getUserService()))
+                .route("user_employee_profile", r -> r.path(USER_ROUTE_EMPLOYEE_PROFILE)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYEE))))
+                        .uri(cdcntProperties.getUserService()))
+                .route("user_employee_profile_picture", r -> r.path(USER_ROUTE_EMPLOYEE_PROFILE_PICTURE)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYEE))))
+                        .uri(cdcntProperties.getUserService()))
+                .route("user_employee_resume", r -> r.path(USER_ROUTE_EMPLOYEE_RESUME)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(EMPLOYEE))))
+                        .uri(cdcntProperties.getUserService()))
 
-                // ==== ADMIN SERVICE ROUTES (localhost:8082) ====
-                .route("admin_get_employers", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYERS)
+                // ==== ADMIN SERVICE ROUTES (localhost:8083) ====
+                .route("admin_get_all_employers", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYERS)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(cdcntProperties.getAdminService()))
                 .route("admin_review_employer", r -> r.path(ADMIN_ROUTE_REVIEW_EMPLOYER_PROFILE)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(cdcntProperties.getAdminService()))
-                .route("admin_delete_employees", r -> r.path(ADMIN_ROUTE_DELETE_EMPLOYERS)
+                .route("admin_delete_employer", r -> r.path(ADMIN_ROUTE_DELETE_EMPLOYER)
+                        .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
+                        .uri(cdcntProperties.getAdminService()))
+                .route("admin_get_all_employees", r -> r.path(ADMIN_ROUTE_GET_ALL_EMPLOYEES)
                         .filters(f -> f.filter(jwtAuthenticationFilter.jwtRoleFilter(List.of(ADMIN))))
                         .uri(cdcntProperties.getAdminService()))
 
-                // ==== JOB SERVICE ROUTES (localhost:8083) ====
+
+                // ==== JOB SERVICE ROUTES (localhost:8084) ====
+
+
+                // ==== INTERVIEW PREP SERVICE ROUTES (localhost:8085) ====
+
 
                 .build();
     }
