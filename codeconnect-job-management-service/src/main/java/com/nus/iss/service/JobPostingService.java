@@ -34,7 +34,7 @@ public class JobPostingService {
         Optional<JobPosting> optionalJobPosting = jobPostingRepository.findById(jobPosting.getId());
         if (optionalJobPosting.isPresent()) {
             JobPosting existingJobPosting = optionalJobPosting.get();
-            existingJobPosting.setStatus(jobPosting.getStatus());
+            existingJobPosting.setStatus("ACTIVE");
             return jobPostingRepository.save(existingJobPosting);
         } else {
             throw new RuntimeException("Job posting not found");
