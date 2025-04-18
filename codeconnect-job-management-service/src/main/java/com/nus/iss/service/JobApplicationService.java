@@ -68,7 +68,6 @@ public class JobApplicationService {
         }
     }
 
-
     public void sendInterviewInvite(Long jobPostingId, String applicantName, String interviewDate) {
         Optional<JobApplication> jobApplicationOpt = getJobApplicationByJobPostingAndApplicantName(jobPostingId, applicantName);
         if (jobApplicationOpt.isPresent()) {
@@ -76,12 +75,13 @@ public class JobApplicationService {
 
             String applicantEmail = jobApplication.getApplicantEmail();
             String jobTitle = jobApplication.getJobPosting().getJobTitle();
+            String companyName = jobApplication.getJobPosting().getCompanyName();
 
             String subject = "Interview Invitation for " + jobTitle;
             String body = "Dear " + applicantName + ",\n\n"
                     + "You are invited for an interview for the position of " + jobTitle + ".\n"
                     + "Interview Date: " + interviewDate + "\n\n"
-                    + "Best regards,\nYour Company";
+                    + "Best regards,\n" + companyName;
 
             emailService.sendEmail(applicantEmail, subject, body);
         } else {
