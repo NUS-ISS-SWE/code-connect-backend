@@ -56,4 +56,12 @@ public class JobApplicationController {
                 .filter(ja -> ja.getJobPosting().getJobTitle().equalsIgnoreCase(jobTitle))
                 .count();
     }
+
+    @GetMapping("/applicantNames/byJobTitle")
+    public List<String> getApplicantNamesByJobTitle(@RequestParam String jobTitle) {
+        return jobApplicationService.getAllJobApplications().stream()
+                .filter(ja -> ja.getJobPosting().getJobTitle().equalsIgnoreCase(jobTitle))
+                .map(JobApplication::getApplicantName)
+                .toList();
+    }
 }
