@@ -64,4 +64,18 @@ public class JobApplicationController {
                 .map(JobApplication::getApplicantName)
                 .toList();
     }
+
+    @PostMapping("/{jobPostingId}/sendInterviewInvite")
+    public ResponseEntity<String> sendInterviewInvite(
+            @PathVariable Long jobPostingId,
+            @RequestParam String applicantName,
+            @RequestParam String interviewDate) {
+        try {
+            jobApplicationService.sendInterviewInvite(jobPostingId, applicantName, interviewDate);
+            return ResponseEntity.ok("Interview invite sent successfully to " + applicantName);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

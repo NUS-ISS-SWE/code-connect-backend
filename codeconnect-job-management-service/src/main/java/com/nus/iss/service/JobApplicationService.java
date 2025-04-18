@@ -67,4 +67,29 @@ public class JobApplicationService {
             throw new RuntimeException("Application not found with ID: " + applicationId);
         }
     }
+
+
+    public void sendInterviewInvite(Long jobPostingId, String applicantName, String interviewDate) {
+        Optional<JobApplication> jobApplicationOpt = getJobApplicationByJobPostingAndApplicantName(jobPostingId, applicantName);
+        if (jobApplicationOpt.isPresent()) {
+            JobApplication jobApplication = jobApplicationOpt.get();
+
+            String applicantEmail = jobApplication.getApplicantEmail();
+            String jobTitle = jobApplication.getJobPosting().getJobTitle();
+
+            String subject = "Interview Invitation for " + jobTitle;
+            String body = "Dear " + applicantName + ",\n\n"
+                    + "You are invited for an interview for the position of " + jobTitle + ".\n"
+                    + "Interview Date: " + interviewDate + "\n\n"
+                    + "Best regards,\nYour Company";
+
+            emailService.sendEmail(applicantEmail, subject, body);
+        } else {
+            throw new RuntimeException("Job Application not found for Job Posting ID: " + jobPostingId + " and Applicant Name: " + applicantName);
+        }
+    }
+
+    public Optional<JobApplication> getJobApplicationByJobPostingAndApplicantName(Long jobPostingId, String applicantName) {
+        return jobApplicationRepository.findByJobPostingIdAndApplicantName(jobPostingId, applicantName);
+    }
 }
