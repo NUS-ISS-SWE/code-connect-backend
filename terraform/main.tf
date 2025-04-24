@@ -100,9 +100,20 @@ sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
-aws s3 cp s3://code-connect-s3/docker-compose.yml /home/ec2-user/docker-compose.yml
+# Debugging and logging
+echo "Starting Docker Compose..." >> /var/log/user-data.log
+aws s3 cp s3://code-connect-s3/docker-compose.yml /home/ec2-user/docker-compose.yml >> /var/log/user-data.log 2>&1
 cd /home/ec2-user
-sudo docker-compose up -d
+
+# Wait for Docker to be ready
+while ! sudo systemctl is-active --quiet docker; do
+  echo "Waiting for Docker to start..." >> /var/log/user-data.log
+  sleep 20
+done
+
+# Run docker-compose up
+sudo docker-compose up -d >> /var/log/user-data.log 2>&1
+echo "Docker Compose finished running." >> /var/log/user-data.log
 
 EOF
 
