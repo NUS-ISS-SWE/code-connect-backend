@@ -62,4 +62,12 @@ public class SkillsAssessmentController {
     public List<Map<String, Object>> getAssessmentHistory(@PathVariable String candidateName) {
         return skillsAssessmentService.getAssessmentHistory(candidateName);
     }
+
+    // Get leaderboard for a specific skills test type and time period
+    @GetMapping("/leaderboard/{type}")
+    public List<Map<String, Object>> getLeaderboard(
+            @PathVariable String type,
+            @RequestParam String timePeriod) {
+        return skillsAssessmentService.getLeaderboard(type, timePeriod);
+    }
 }

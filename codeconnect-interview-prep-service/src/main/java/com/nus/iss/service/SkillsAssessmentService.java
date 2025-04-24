@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillsAssessmentService {
@@ -149,5 +150,59 @@ public class SkillsAssessmentService {
             expectedAnswers.add(correctAnswers.getOrDefault(question, "N/A"));
         }
         return expectedAnswers;
+    }
+
+    // Retrieve the leaderboard
+    public List<Map<String, Object>> getLeaderboard(String type, String timePeriod) {
+        Instant now = Instant.now();
+        Instant startTime;
+
+        // Determine the start time based on the time period
+        switch (timePeriod.toLowerCase()) {
+            case "weekly":
+                startTime = now.minusSeconds(7 * 24 * 60 * 60); // 7 days
+                break;
+            case "monthly":
+                startTime = now.minusSeconds(30 * 24 * 60 * 60); // 30 days
+                break;
+            case "all-time":
+                startTime = Instant.EPOCH; // All-time
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid time period: " + timePeriod);
+        }
+
+        // Filter and aggregate scores
+        Map<String, Integer> scores = new HashMap<>();
+        for (Map.Entry<String, List<Map<String, Object>>> entry : assessmentHistory.entrySet()) {
+            String candidateName = entry.getKey();
+            List<Map<String, Object>> attempts = entry.getValue();
+
+            int totalScore = attempts.stream()
+                .filter(attempt -> type.equalsIgnoreCase((String) attempt.get("type")))
+                .filter(attempt -> {
+                    String timestamp = (String) attempt.get("timestamp");
+                    LocalDateTime attemptTime = LocalDateTime.parse(timestamp, DATE_TIME_FORMATTER);
+                    return attemptTime.atZone(ZoneId.systemDefault()).toInstant().isAfter(startTime);
+                })
+                .mapToInt(attempt -> (int) attempt.get("score"))
+                .sum();
+
+            if (totalScore > 0) {
+                scores.put(candidateName, totalScore);
+            }
+        }
+
+        // Sort by score in descending order and limit to top 3
+        return scores.entrySet().stream()
+            .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+            .limit(3) // Limit to top 3 performers
+            .map(entry -> {
+                Map<String, Object> result = new HashMap<>();
+                result.put("candidateName", entry.getKey());
+                result.put("totalScore", entry.getValue());
+                return result;
+            })
+            .collect(Collectors.toList());
     }
 }
