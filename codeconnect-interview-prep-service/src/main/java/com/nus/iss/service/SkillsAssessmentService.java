@@ -2,6 +2,10 @@ package com.nus.iss.service;
 
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -38,6 +42,10 @@ public class SkillsAssessmentService {
         put("Which algorithm is used to find the shortest path in a graph?\nA) Depth First Search\nB) Breadth First Search\nC) Dijkstra's Algorithm\nD) Kruskal's Algorithm", "C");
         put("What is the space complexity of Merge Sort?\nA) O(1)\nB) O(n)\nC) O(log n)\nD) O(n log n)", "B");
     }};
+
+    private final Map<String, List<Map<String, Object>>> assessmentHistory = new HashMap<>();
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public List<String> getSkillsTest(String type) {
         List<String> questions;
@@ -101,5 +109,45 @@ public class SkillsAssessmentService {
         } else {
             throw new IllegalArgumentException("Invalid question type: " + type);
         }
+    }
+
+    // Save an assessment attempt
+    public void saveAssessmentAttempt(String candidateName, String type, List<String> questions, List<String> candidateAnswers, List<String> expectedAnswers, int score) {
+        List<Map<String, Object>> attempts = assessmentHistory.computeIfAbsent(candidateName, k -> new ArrayList<>());
+
+        Map<String, Object> attempt = new HashMap<>();
+        attempt.put("type", type);
+        attempt.put("questions", questions);
+        attempt.put("candidateAnswers", candidateAnswers);
+        attempt.put("expectedAnswers", expectedAnswers);
+        attempt.put("score", score);
+
+        String formattedTimestamp = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()).format(DATE_TIME_FORMATTER);
+        attempt.put("timestamp", formattedTimestamp);
+
+        attempts.add(attempt);
+    }
+
+    // Retrieve the assessment history for a candidate
+    public List<Map<String, Object>> getAssessmentHistory(String candidateName) {
+        return assessmentHistory.getOrDefault(candidateName, new ArrayList<>());
+    }
+
+    // Get expected answers for a list of questions
+    public List<String> getExpectedAnswers(String type, List<String> questions) {
+        Map<String, String> correctAnswers;
+        if ("frontend".equalsIgnoreCase(type)) {
+            correctAnswers = FRONTEND_ANSWERS;
+        } else if ("backend".equalsIgnoreCase(type)) {
+            correctAnswers = BACKEND_ANSWERS;
+        } else {
+            throw new IllegalArgumentException("Invalid test type: " + type);
+        }
+
+        List<String> expectedAnswers = new ArrayList<>();
+        for (String question : questions) {
+            expectedAnswers.add(correctAnswers.getOrDefault(question, "N/A"));
+        }
+        return expectedAnswers;
     }
 }
