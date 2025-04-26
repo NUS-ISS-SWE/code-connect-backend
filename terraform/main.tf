@@ -13,6 +13,18 @@ provider "aws" {
   region = var.region
 }
 
+resource "aws_s3_bucket" "code_connect_s3" {
+  bucket = "code-connect-s3"
+  acl    = "private"
+}
+
+resource "aws_s3_object" "docker_compose" {
+  bucket = aws_s3_bucket.code_connect_s3.bucket
+  key    = "docker-compose.yml"
+  source = var.s3_docker_compose_source
+  acl    = "private"
+}
+
 resource "aws_iam_role" "ec2_s3_access_role" {
   name = "EC2S3AccessRole"
   assume_role_policy = jsonencode({
@@ -67,6 +79,13 @@ resource "aws_security_group" "app_server_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port = 3000
+    to_port   = 3000
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port = 0
     to_port   = 0
@@ -116,82 +135,8 @@ EOF
   }
 }
 
-resource "aws_security_group" "load_balancer_security_group" {
-  name        = "load-balancer-security-group"
-  description = "Allow HTTP and HTTPS traffic to the load balancer"
-  tags = {
-    Name = "load-balancer-security-group"
-  }
-
-  ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port = 443
-    to_port   = 443
-    protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_lb" "app_load_balancer" {
-  name                       = "app-load-balancer"
-  internal                   = false
-  load_balancer_type         = "application"
-  security_groups = [aws_security_group.load_balancer_security_group.id]
-  subnets                    = var.subnet_ids
-  enable_deletion_protection = false
-  tags = {
-    Name = "app-load-balancer"
-  }
-}
-
-resource "aws_lb_target_group" "app_target_group" {
-  name     = "app-target-group"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = var.vpc_id
-
-  health_check {
-    interval            = 30
-    path                = "/actuator/health"
-    port                = "8080"
-    protocol            = "HTTP"
-    timeout             = 5
-    unhealthy_threshold = 2
-    healthy_threshold   = 2
-  }
-}
-
-resource "aws_lb_listener" "http_listener" {
-  load_balancer_arn = aws_lb.app_load_balancer.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type = "forward"
-    target_group_arn = aws_lb_target_group.app_target_group.arn
-  }
-}
-
-resource "aws_lb_target_group_attachment" "ec2_instance_attachment" {
-  target_group_arn = aws_lb_target_group.app_target_group.arn
+resource "aws_lb_target_group_attachment" "lb_attachment" {
+  target_group_arn = var.alb_target_group_arn
   target_id        = aws_instance.app_server.id
-  port             = 80
-}
-
-output "load_balancer_url" {
-  description = "The URL of the Load Balancer"
-  value       = "http://${aws_lb.app_load_balancer.dns_name}"
+  port             = 3000
 }

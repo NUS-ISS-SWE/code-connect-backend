@@ -32,3 +32,15 @@ variable "key_pair" {
     type        = string
     default     = "code-connect-key-pair"
 }
+
+variable "s3_docker_compose_source" {
+  description = "The path to the private key file for SSH access"
+  type        = string
+  default     = "C:\\Users\\mingw\\IdeaProjects\\nus\\code-connect-backend\\docker-compose.yml"
+}
+
+variable "alb_target_group_arn" {
+  description = "The ARN of the target group for the ALB"
+  type        = string
+  default     = "arn:aws:elasticloadbalancing:ap-southeast-1:697982515707:targetgroup/mw-target-group/caef3c2f16c6112c"
+}
