@@ -15,7 +15,7 @@ services:
       - codeconnect-network
 
   liquibase-service:
-    image: 961125mingwei/codeconnect-liquibase-service:v1
+    image: 961125mingwei/codeconnect-liquibase-service:v2
     container_name: liquibase-service
     environment:
       POSTGRES_DB: cdcnt_main_db
@@ -29,7 +29,7 @@ services:
       - codeconnect-network
 
   user-management-service:
-    image: 961125mingwei/codeconnect-user-management-service:v1
+    image: 961125mingwei/codeconnect-user-management-service:v2
     container_name: user-management-service
     ports:
       - "8082:8082"
@@ -41,7 +41,7 @@ services:
       - SPRING_PROFILES_ACTIVE=uat
 
   admin-management-service:
-    image: 961125mingwei/codeconnect-admin-management-service:v1
+    image: 961125mingwei/codeconnect-admin-management-service:v2
     container_name: admin-management-service
     ports:
       - "8083:8083"
@@ -53,7 +53,7 @@ services:
       - SPRING_PROFILES_ACTIVE=uat
 
   job-management-service:
-    image: 961125mingwei/codeconnect-job-management-service:v1
+    image: 961125mingwei/codeconnect-job-management-service:v2
     container_name: job-management-service
     ports:
       - "8084:8084"
@@ -65,7 +65,7 @@ services:
       - SPRING_PROFILES_ACTIVE=uat
 
   interview-prep-service:
-    image: 961125mingwei/codeconnect-interview-prep-service:v1
+    image: 961125mingwei/codeconnect-interview-prep-service:v2
     container_name: interview-prep-service
     ports:
       - "8085:8085"
@@ -77,7 +77,7 @@ services:
       - SPRING_PROFILES_ACTIVE=uat
 
   api-gateway:
-    image: 961125mingwei/codeconnect-api-gateway:v1
+    image: 961125mingwei/codeconnect-api-gateway:v2
     container_name: api-gateway
     ports:
       - "8080:8080"
@@ -91,6 +91,16 @@ services:
       - user-management-service
     environment:
       - SPRING_PROFILES_ACTIVE=uat
+
+  app-frontend:
+    image: jonathantayyw/code-connect-frontend:latest
+    container_name: app-frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - codeconnect-network
+    depends_on:
+      - api-gateway
 
 networks:
   codeconnect-network:
