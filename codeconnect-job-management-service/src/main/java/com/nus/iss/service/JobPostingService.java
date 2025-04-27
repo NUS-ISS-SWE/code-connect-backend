@@ -29,4 +29,15 @@ public class JobPostingService {
     public void deleteJobPosting(Long id) {
         jobPostingRepository.deleteById(id);
     }
+
+    public JobPosting reviewJobPosting(JobPosting jobPosting) {
+        Optional<JobPosting> optionalJobPosting = jobPostingRepository.findById(jobPosting.getId());
+        if (optionalJobPosting.isPresent()) {
+            JobPosting existingJobPosting = optionalJobPosting.get();
+            existingJobPosting.setStatus("ACTIVE");
+            return jobPostingRepository.save(existingJobPosting);
+        } else {
+            throw new RuntimeException("Job posting not found");
+        }
+    }
 }

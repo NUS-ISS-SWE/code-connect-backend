@@ -1,5 +1,10 @@
 build.sh
 
+*.tfstate
+*.tfstate.backup
+
+.terraform/
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

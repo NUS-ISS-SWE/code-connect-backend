@@ -2,6 +2,7 @@ package com.nus.iss.service.impl;
 
 import com.nus.iss.config.CdcntProperties;
 import com.nus.iss.dto.AppUserDTO;
+import com.nus.iss.dto.JobPostingDTO;
 import com.nus.iss.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,21 @@ public class AdminServiceImpl implements AdminService {
                 .body(new ParameterizedTypeReference<List<AppUserDTO>>() {
                 });
         log.info("List of employee users: {}", response);
+        return response;
+    }
+
+    @Override
+    public JobPostingDTO reviewJobPosting(JobPostingDTO jobPostingDTO) {
+        log.info("Reviewing job posting: {}", jobPostingDTO);
+        String url = cdcntProperties.getServices().getJobService().getUrl()
+                .concat(cdcntProperties.getServices().getJobService().getReviewJobPosting());
+        JobPostingDTO response = restClient.post()
+                .uri(url)
+                .body(jobPostingDTO)
+                .retrieve()
+                .body(new ParameterizedTypeReference<JobPostingDTO>() {
+                });
+        log.info("Reviewed job posting: {}", response);
         return response;
     }
 }

@@ -63,4 +63,19 @@ class SkillsAssessmentServiceTest {
         List<String> questions = skillsAssessmentService.getAllQuestions("frontend");
         assertFalse(questions.contains(questionToRemove));
     }
+
+    @Test
+    void testGetExpectedAnswers() {
+        List<String> questions = Arrays.asList(
+            "What is the time complexity of accessing an element in an array?\nA) O(1)\nB) O(n)\nC) O(log n)\nD) O(n log n)",
+            "Which data structure is used for implementing LIFO (Last In First Out) order?\nA) Queue\nB) Stack\nC) Linked List\nD) Tree"
+        );
+
+        List<String> expectedAnswers = skillsAssessmentService.getExpectedAnswers("backend", questions);
+
+        assertNotNull(expectedAnswers);
+        assertEquals(2, expectedAnswers.size());
+        assertEquals("A", expectedAnswers.get(0)); 
+        assertEquals("B", expectedAnswers.get(1)); 
+    }
 }

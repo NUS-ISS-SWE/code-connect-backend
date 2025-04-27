@@ -12,4 +12,5 @@ cdcnt:
       get-all-employee-profiles: /list-employee-profiles
 
     job-service:
-      url: http://localhost:8083/api/v1
+      url: http://localhost:8084/api/v1
+      review-job-posting: /jobpostings/review

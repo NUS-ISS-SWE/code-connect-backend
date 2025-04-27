@@ -23,6 +23,7 @@ public class JobPosting {
     private String requiredSkills;
     private String preferredSkills;
     private String requiredCertifications;
+
     
     @Lob
     private byte[] thumbnail;
@@ -30,6 +31,7 @@ public class JobPosting {
     private Date postedDate;
     private String salaryRange;
     private int numberApplied; // Add this field
+    private String status;
 
     // Getters and Setters
     public Long getId() {
@@ -142,5 +144,13 @@ public class JobPosting {
 
     public void setNumberApplied(int numberApplied) {
         this.numberApplied = numberApplied;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

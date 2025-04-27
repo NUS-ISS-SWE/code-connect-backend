@@ -42,4 +42,40 @@ public class JobApplicationController {
     public void updateStatus(@PathVariable Long id, @RequestParam String status) {
         jobApplicationService.updateApplicationStatus(id, status);
     }
+
+    @GetMapping("/byJobTitle")
+    public List<JobApplication> getJobApplicationsByJobTitle(@RequestParam String jobTitle) {
+        return jobApplicationService.getAllJobApplications().stream()
+                .filter(ja -> ja.getJobPosting().getJobTitle().equalsIgnoreCase(jobTitle))
+                .toList();
+    }
+
+    @GetMapping("/count/byJobTitle")
+    public long getJobApplicationCountByJobTitle(@RequestParam String jobTitle) {
+        return jobApplicationService.getAllJobApplications().stream()
+                .filter(ja -> ja.getJobPosting().getJobTitle().equalsIgnoreCase(jobTitle))
+                .count();
+    }
+
+    @GetMapping("/applicantNames/byJobTitle")
+    public List<String> getApplicantNamesByJobTitle(@RequestParam String jobTitle) {
+        return jobApplicationService.getAllJobApplications().stream()
+                .filter(ja -> ja.getJobPosting().getJobTitle().equalsIgnoreCase(jobTitle))
+                .map(JobApplication::getApplicantName)
+                .toList();
+    }
+
+    @PostMapping("/{jobPostingId}/sendInterviewInvite")
+    public ResponseEntity<String> sendInterviewInvite(
+            @PathVariable Long jobPostingId,
+            @RequestParam String applicantName,
+            @RequestParam String interviewDate) {
+        try {
+            jobApplicationService.sendInterviewInvite(jobPostingId, applicantName, interviewDate);
+            return ResponseEntity.ok("Interview invite sent successfully to " + applicantName);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
