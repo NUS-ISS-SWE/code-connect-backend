@@ -41,7 +41,6 @@ class AdminControllerTest {
                 .id(1L)
                 .username("john_doe")
                 .password("password123")
-                .newPassword("newPassword123")
                 .role("Admin")
                 .email("john.doe@example.com")
                 .status("Active")
