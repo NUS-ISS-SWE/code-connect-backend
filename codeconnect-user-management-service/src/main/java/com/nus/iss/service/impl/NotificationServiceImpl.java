@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(savedAppUser.getEmail());
         message.setSubject("Activate your CodeConnect account");
-        message.setText("Please click the link to activate your account: http://localhost:8080/api/v1/activate?token="
+        message.setText("Please click the link to activate your account: http://www.codeconnect.com/api/v1/activate?token="
                 + Base64.getEncoder().encodeToString(savedAppUser.getUsername().getBytes()));
         javaMailSender.send(message);
     }
