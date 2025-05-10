@@ -31,7 +31,7 @@ INSERT INTO employee_profile (
     full_name, job_title, current_company, location, phone, about_me, programming_language, education, experience, certification, skill_set, app_user_id
 )
 VALUES
-('Alice Smith', 'Software Engineer', 'Tech Corp', 'New York, NY', '123-456-7890',
+('Alice Smith', 'Software Engineer', 'Tech Corp', 'New York, NY', '65123456',
  'Passionate about backend development.', 'Java, Python, SQL',
  'B.Sc. Computer Science', '3 years at Tech Corp', 'Oracle Java SE 11', 'Spring, Hibernate, Git',
  (SELECT id FROM app_user WHERE username = 'employee1')),

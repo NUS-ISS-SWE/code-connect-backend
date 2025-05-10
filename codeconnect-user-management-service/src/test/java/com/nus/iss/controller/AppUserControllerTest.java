@@ -1,6 +1,7 @@
 package com.nus.iss.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nus.iss.dto.AppUserDTO;
+import com.nus.iss.dto.JwtAccessTokenDTO;
 import com.nus.iss.entity.AppUser;
 import com.nus.iss.service.AppUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,53 +10,117 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class AppUserControllerTest {
-
-    private MockMvc mockMvc;
+    @InjectMocks
+    private AppUserController appUserController;
 
     @Mock
     private AppUserService appUserService;
 
-    @InjectMocks
-    private AppUserController appUserController;
-
-    private ObjectMapper objectMapper;
-    private AppUser testUser;
-
+    private AppUserDTO employerUserDTO;
+    private AppUserDTO employeeUserDTO;
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(appUserController).build();
-        objectMapper = new ObjectMapper();
-
-        testUser = AppUser.builder()
-                .username("testuser")
-                .password("password123")
-                .role("USER")
+        employerUserDTO = new AppUserDTO();
+        employerUserDTO = AppUserDTO.builder()
+                .id(1L)
+                .username("employer1")
+                .password("password")
+                .role("EMPLOYER")
+                .email("john.doe@example.com")
+                .status("ACTIVE")
+                .companyName("TechCorp")
+                .companyDescription("Tech company specializing in AI solutions")
+                .companySize(500)
+                .industry("Technology")
+                .companyLocation("Singapore")
+                .build();
+        employeeUserDTO = new AppUserDTO();
+        employeeUserDTO = AppUserDTO.builder()
+                .id(1L)
+                .username("employee1")
+                .password("password")
+                .role("EMPLOYEE")
+                .email("john.doe@example.com")
+                .status("ACTIVE")
+                .fullName("John Doe")
+                .jobTitle("Software Developer")
+                .currentCompany("Tech Inc.")
+                .location("New York")
+                .phone("123-456-7890")
+                .aboutMe("Passionate about coding")
+                .programmingLanguage("Java, Python")
+                .education("BSc Computer Science")
+                .experience("5 years in software development")
+                .certification("Oracle Certified Java Programmer")
+                .skillSet("Java, Spring, Python, SQL")
                 .build();
     }
 
-//    @Test
-//    void testRegisterUser_Success() throws Exception {
-//        when(appUserService.registerUser(any(AppUser.class))).thenReturn(testUser);
-//
-//        mockMvc.perform(post("/api/v1/register")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(testUser))) // Convert Java object to JSON
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.username").value("testuser"))
-//                .andExpect(jsonPath("$.password").value("password123"))
-//                .andExpect(jsonPath("$.role").value("USER"));
-//
-//        verify(appUserService, times(1)).registerUser(any(AppUser.class));
-//    }
+
+    @Test
+    void register() {
+        when(appUserService.registerUser(employerUserDTO)).thenReturn(employerUserDTO);
+        ResponseEntity<AppUserDTO> register = appUserController.register(employerUserDTO);
+        assertNotNull(register);
+        assertEquals(200, register.getStatusCodeValue());
+        assertEquals(employerUserDTO, register.getBody());
+    }
+
+    @Test
+    void activateUserAcc() {
+        String token = "sample-activation-token";
+
+        doNothing().when(appUserService).activateUser(token);
+
+        ResponseEntity<String> response = appUserController.activateUserAcc(token);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("User activated successfully", response.getBody());
+    }
+
+    @Test
+    void login() {
+        JwtAccessTokenDTO jwtAccessTokenDTO = new JwtAccessTokenDTO();
+        jwtAccessTokenDTO.setAccessToken("sample-jwt-token");
+
+        when(appUserService.login(employerUserDTO.getUsername(), employerUserDTO.getPassword()))
+                .thenReturn(jwtAccessTokenDTO);
+
+        ResponseEntity<JwtAccessTokenDTO> response = appUserController.login(employerUserDTO);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("sample-jwt-token", response.getBody().getAccessToken());
+    }
+
+
+    @Test
+    void updatePassword() {
+        AppUser updatedUser = new AppUser();
+        updatedUser.setUsername(employerUserDTO.getUsername());
+        updatedUser.setPassword("new-password");
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(employerUserDTO.getUsername());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        when(appUserService.updatePassword(employerUserDTO)).thenReturn(updatedUser);
+
+        ResponseEntity<AppUser> response = appUserController.updatePassword(employerUserDTO);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(updatedUser, response.getBody());
+    }
 }
