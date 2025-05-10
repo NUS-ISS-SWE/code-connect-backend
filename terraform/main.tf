@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "code_connect_s3" {
-  bucket = "code-connect-s3"
+  bucket = "code-connect-s3-v2"
   acl    = "private"
 }
 
@@ -117,7 +117,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
 echo "Starting Docker Compose..." >> /var/log/user-data.log
-aws s3 cp s3://code-connect-s3/docker-compose.yml /home/ec2-user/docker-compose.yml >> /var/log/user-data.log 2>&1
+aws s3 cp s3://code-connect-s3-v2/docker-compose.yml /home/ec2-user/docker-compose.yml >> /var/log/user-data.log 2>&1
 cd /home/ec2-user
 
 while ! sudo systemctl is-active --quiet docker; do
