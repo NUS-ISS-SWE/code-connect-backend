@@ -1,0 +1,1415 @@
+{
+	"info": {
+		"_postman_id": "2e0c6f3e-8bb1-44ac-837a-53bb357ce2c0",
+		"name": "NUS ISS SWE Code Connect Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37567851"
+	},
+	"item": [
+		{
+			"name": "Admin login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains accessToken and role\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"accessToken\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson.role).to.eql(\"ADMIN\");\r",
+							"});\r",
+							"\r",
+							"pm.globals.set(\"accessTokenAdmin\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin1\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer onboarding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should contain the expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyName\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companySize\");\r",
+							"    pm.expect(responseJson).to.have.property(\"industry\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employer99\",\r\n    \"password\": \"password\",\r\n    \"role\": \"EMPLOYER\",\r\n    \"email\": \"employer99@example.com\",\r\n    \"companyName\": \"Tech Solutions Inc.\",\r\n    \"companyDescription\": \"Tech Solutions Inc. is a leading provider of innovative software solutions, helping businesses transform digitally through scalable and efficient technology.\",\r\n    \"companySize\": 500,\r\n    \"industry\": \"Information Technology\",\r\n    \"companyLocation\": \"San Francisco, CA, USA\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Review employer data",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains accessToken and role\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson.username).to.eql(\"employer99\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenAdmin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Bearer",
+						"value": "{{accessTokenAdmin}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"employer99\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/review-employer-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"review-employer-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer activate account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include(\"User activated successfully\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/activate?token=ZW1wbG95ZXI5OQ==",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"activate"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "ZW1wbG95ZXI5OQ=="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains accessToken and role\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"accessToken\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson.role).to.eql(\"EMPLOYER\");\r",
+							"});\r",
+							"\r",
+							"pm.globals.set(\"accessTokenEmployer\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employer1\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer retrieve own profile via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"email\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyName\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyDescription\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companySize\");\r",
+							"    pm.expect(responseJson).to.have.property(\"industry\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyLocation\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employer-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employer-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer update own profile via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"email\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyName\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyDescription\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companySize\");\r",
+							"    pm.expect(responseJson).to.have.property(\"industry\");\r",
+							"    pm.expect(responseJson).to.have.property(\"companyLocation\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify response values\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson.companyDescription).to.eql(\"New company Description for us to test.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 2,\r\n    \"username\": \"employer1\",\r\n    \"role\": \"EMPLOYER\",\r\n    \"email\": \"employer1@company.com\",\r\n    \"status\": \"ACTIVE\",\r\n    \"companyName\": \"Tech Corp\",\r\n    \"companyDescription\": \"New company Description for us to test.\",\r\n    \"companySize\": 1000,\r\n    \"industry\": \"Technology\",\r\n    \"companyLocation\": \"New York, NY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employer-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employer-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer upload own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include(\"Profile picture updated successfully\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Cdcnt-Username",
+						"value": "employer1",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "X-Cdcnt-Role",
+						"value": "EMPLOYER",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f02efe2-6e6b-44b0-9fdb-5372ab8cd349"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employer-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employer-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer retrieve own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"profilePicture\");\r",
+							"    pm.expect(responseJson).to.have.property(\"profilePictureFileName\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employer-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employer-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employer delete own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 No Content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employer-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employer-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee onboarding",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should contain the expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employee99\",\r\n    \"password\": \"password\",\r\n    \"role\": \"EMPLOYEE\",\r\n    \"email\": \"employee99@example.com\",\r\n    \"fullName\": \"John Doe\",\r\n    \"jobTitle\": \"Software Engineer\",\r\n    \"currentCompany\": \"Tech Solutions Inc.\",\r\n    \"location\": \"San Francisco, CA\",\r\n    \"phone\": \"+1-555-123-4567\",\r\n    \"aboutMe\": \"Passionate software engineer with 5+ years of experience.\",\r\n    \"programmingLanguage\": \"Java, Python, JavaScript\",\r\n    \"education\": \"B.Sc. in Computer Science - University of California\",\r\n    \"experience\": \"Software Engineer at ABC Corp (2018-2020)\",\r\n    \"certification\": \"AWS Certified Developer\",\r\n    \"skillSet\": \"Java\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee activate account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include(\"User activated successfully\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/activate?token=ZW1wbG95ZWU5OQ==",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"activate"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "ZW1wbG95ZWU5OQ=="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains accessToken and role\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"accessToken\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson.role).to.eql(\"EMPLOYEE\");\r",
+							"});\r",
+							"\r",
+							"pm.globals.set(\"accessTokenEmployee\", pm.response.json().accessToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"employee1\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee retrieve own profile via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"email\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"    pm.expect(responseJson).to.have.property(\"fullName\");\r",
+							"    pm.expect(responseJson).to.have.property(\"jobTitle\");\r",
+							"    pm.expect(responseJson).to.have.property(\"currentCompany\");\r",
+							"    pm.expect(responseJson).to.have.property(\"location\");\r",
+							"    pm.expect(responseJson).to.have.property(\"phone\");\r",
+							"    pm.expect(responseJson).to.have.property(\"aboutMe\");\r",
+							"    pm.expect(responseJson).to.have.property(\"programmingLanguage\");\r",
+							"    pm.expect(responseJson).to.have.property(\"education\");\r",
+							"    pm.expect(responseJson).to.have.property(\"experience\");\r",
+							"    pm.expect(responseJson).to.have.property(\"certification\");\r",
+							"    pm.expect(responseJson).to.have.property(\"skillSet\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee update own profile via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"username\");\r",
+							"    pm.expect(responseJson).to.have.property(\"role\");\r",
+							"    pm.expect(responseJson).to.have.property(\"email\");\r",
+							"    pm.expect(responseJson).to.have.property(\"status\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify response values\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson.aboutMe).to.eql(\"New about me after updating.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 5,\r\n    \"username\": \"employee1\",\r\n    \"role\": \"EMPLOYEE\",\r\n    \"email\": \"emp1@example.com\",\r\n    \"status\": \"ACTIVE\",\r\n    \"fullName\": \"NEW NAME\",\r\n    \"jobTitle\": \"Software Engineer\",\r\n    \"currentCompany\": \"Tech Corp\",\r\n    \"location\": \"New York, NY\",\r\n    \"phone\": \"123-456-7890\",\r\n    \"aboutMe\": \"New about me after updating.\",\r\n    \"programmingLanguage\": \"Java, Python, SQL\",\r\n    \"education\": \"B.Sc. Computer Science\",\r\n    \"experience\": \"3 years at Tech Corp\",\r\n    \"certification\": \"Oracle Java SE 11\",\r\n    \"skillSet\": \"Spring, Hibernate, Git\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee upload own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include(\"Profile picture updated successfully\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Cdcnt-Username",
+						"value": "employer1",
+						"type": "text"
+					},
+					{
+						"key": "X-Cdcnt-Role",
+						"value": "EMPLOYER",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f02efe2-6e6b-44b0-9fdb-5372ab8cd349"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee retrieve own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"profilePicture\");\r",
+							"    pm.expect(responseJson).to.have.property(\"profilePictureFileName\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee delete own profile picture via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 No Content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-profiles-picture",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-profiles-picture"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee upload own resume via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.include(\"Resume updated successfully\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f02efe2-6e6b-44b0-9fdb-5372ab8cd349"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-resume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee retrieve own resume via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseJson).to.have.property(\"id\");\r",
+							"    pm.expect(responseJson).to.have.property(\"resumeContent\");\r",
+							"    pm.expect(responseJson).to.have.property(\"resumeFileName\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-resume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employee delete own resume via JWT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204 No Content\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is empty\", function () {\r",
+							"    const responseBody = pm.response.text();\r",
+							"    pm.expect(responseBody).to.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenEmployee}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/employee-resume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"employee-resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all employer data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"All users have role EMPLOYER\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    responseJson.forEach(function (user) {\r",
+							"        pm.expect(user.role).to.eql(\"EMPLOYER\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields for each user\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    responseJson.forEach(function (user) {\r",
+							"        pm.expect(user).to.have.property(\"id\");\r",
+							"        pm.expect(user).to.have.property(\"username\");\r",
+							"        pm.expect(user).to.have.property(\"role\");\r",
+							"        pm.expect(user).to.have.property(\"email\");\r",
+							"        pm.expect(user).to.have.property(\"status\");\r",
+							"        pm.expect(user).to.have.property(\"companyName\");\r",
+							"        pm.expect(user).to.have.property(\"companyDescription\");\r",
+							"        pm.expect(user).to.have.property(\"companySize\");\r",
+							"        pm.expect(user).to.have.property(\"industry\");\r",
+							"        pm.expect(user).to.have.property(\"companyLocation\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.not.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenAdmin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/list-employer-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"list-employer-profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all employee data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"All users have role EMPLOYEE\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    responseJson.forEach(function (user) {\r",
+							"        pm.expect(user.role).to.eql(\"EMPLOYEE\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected fields for each employee\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"\r",
+							"    responseJson.forEach(function (user) {\r",
+							"        pm.expect(user).to.have.property(\"id\");\r",
+							"        pm.expect(user).to.have.property(\"username\");\r",
+							"        pm.expect(user).to.have.property(\"role\");\r",
+							"        pm.expect(user).to.have.property(\"email\");\r",
+							"        pm.expect(user).to.have.property(\"status\");\r",
+							"        pm.expect(user).to.have.property(\"fullName\");\r",
+							"        pm.expect(user).to.have.property(\"jobTitle\");\r",
+							"        pm.expect(user).to.have.property(\"currentCompany\");\r",
+							"        pm.expect(user).to.have.property(\"location\");\r",
+							"        pm.expect(user).to.have.property(\"phone\");\r",
+							"        pm.expect(user).to.have.property(\"aboutMe\");\r",
+							"        pm.expect(user).to.have.property(\"programmingLanguage\");\r",
+							"        pm.expect(user).to.have.property(\"education\");\r",
+							"        pm.expect(user).to.have.property(\"experience\");\r",
+							"        pm.expect(user).to.have.property(\"certification\");\r",
+							"        pm.expect(user).to.have.property(\"skillSet\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.not.be.empty;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessTokenAdmin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/list-employee-profiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"list-employee-profiles"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
